@@ -7,6 +7,54 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+
+        <!--<Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>-->
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="0.35*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" >
+            <MenuItem Header="File">
+                <MenuItem Header="Open" Click="Open_Click"></MenuItem>
+                <MenuItem Header="Save"></MenuItem>
+                <MenuItem Header="Save as" Click="SaveAs_Click"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Lexical Analyser">
+                <MenuItem Header="Algorithm ">
+                    <MenuItem Header="Diagram of state" IsCheckable="True"></MenuItem>
+                    <MenuItem Header="Finite-state machiner" IsCheckable="True"></MenuItem>
+                </MenuItem>
+                <MenuItem Name="showLexemTable" Header="Show Table of lexem" IsCheckable="True" />
+            </MenuItem>
+            <MenuItem Header="Syntax Analyser">
+                <MenuItem Header="Algorithm ">
+                    <MenuItem Header="Recursive descent parser" IsCheckable="True"></MenuItem>
+                    <MenuItem Header="Pushdown automaton" IsCheckable="True"></MenuItem>
+                    <MenuItem Header="Ascending parser" IsCheckable="True">
+                        <MenuItem Name="showAscendingRelationMatrix" Header="Show relation matrix" IsCheckable="True" />
+                        
+                    </MenuItem>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="Start" Click="Start_Click"></MenuItem>
+        </Menu>
         
+        <RichTextBox Name="codeTextBox" Grid.Row="1" >
+        </RichTextBox>
+
+        <GridSplitter Grid.Row="2"  ShowsPreview="False" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+
+        <RichTextBox Name="consoleBox" Grid.Row="3">
+        </RichTextBox>
+
     </Grid>
 </Window>

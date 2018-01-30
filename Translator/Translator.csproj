@@ -36,6 +36,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -48,12 +50,36 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LexicalAnalyser\LexemEnum.cs" />
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\AscendingAnalys.cs" />
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\RealtionMatrix.cs" />
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\Relation.cs" />
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\RelationTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\RelationTable.Designer.cs">
+      <DependentUpon>RelationTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\RightPart.cs" />
+    <Compile Include="SyntaxAnalyser\ISyntaxAnalyser.cs" />
+    <Compile Include="SyntaxAnalyser\RecursiveDescentParser\AtLeastOne.cs" />
+    <Compile Include="SyntaxAnalyser\RecursiveDescentParser\Consecutive.cs" />
+    <Compile Include="SyntaxAnalyser\RecursiveDescentParser\IExecute.cs" />
+    <Compile Include="SyntaxAnalyser\RecursiveDescentParser\Parallel.cs" />
+    <Compile Include="SyntaxAnalyser\RecursiveDescentParser\RecursiveDescent.cs" />
+    <Compile Include="SyntaxAnalyser\RecursiveDescentParser\SyntaxExeption.cs" />
+    <Compile Include="SyntaxAnalyser\RecursiveDescentParser\Unit.cs" />
+    <Page Include="LexicalAnalyser\LexemTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -61,6 +87,19 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Const.cs" />
+    <Compile Include="Lexem.cs" />
+    <Compile Include="Idnt.cs" />
+    <Compile Include="LexicalAnalyser\Check.cs" />
+    <Compile Include="LexicalAnalyser\DiagramOfState\DiagramOfStateAnalyser.cs" />
+    <Compile Include="LexicalAnalyser\FiniteStateMachine\State.cs" />
+    <Compile Include="LexicalAnalyser\LexicalUnit.cs" />
+    <Compile Include="LexicalAnalyser\DiagramOfState\State.cs" />
+    <Compile Include="LexicalAnalyser\FiniteStateMachine\FiniteMachine.cs" />
+    <Compile Include="LexicalAnalyser\ILexicalAnalyser.cs" />
+    <Compile Include="LexicalAnalyser\LexemTable.xaml.cs">
+      <DependentUpon>LexemTable.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -85,6 +124,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="SyntaxAnalyser\AscendingAnalysis\RelationTable.resx">
+      <DependentUpon>RelationTable.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -92,6 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SyntaxAnalyser\PushdownAutomaton\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
