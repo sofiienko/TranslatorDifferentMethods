@@ -32,6 +32,9 @@ namespace Translator
 
             Paragraph paragraph = this.codeTextBox.Document.Blocks.FirstBlock as Paragraph;
             paragraph.LineHeight = 8;
+
+
+            Console.SetOut(new MultiTextWriter(new ControlWriter(consoleBox), Console.Out));
         }
 
 
@@ -59,13 +62,14 @@ namespace Translator
 
             ISyntaxAnalyser syntaxAnalyser = new AscendingAnalys();
 
-            try
-            {
+            //try
+            //{
                 syntaxAnalyser.CheckSyntax(analyser.LexemList);
-            }catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message+" "+ex.Source);
-            }
+          //  }
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message+" "+ex.Source);
+            //}
 }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)

@@ -10,6 +10,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 {
     class RealtionMatrix
     {
+
+       // Dictionary<string, Dictionary<string,string>> matrix = new Dictionary<string, System.Collections.Generic.Dictionary<string,string>>();
         public Dictionary<string, RightPart> Grammar = new Dictionary<string, RightPart>();
         public Dictionary<string, List<string>> equals = new Dictionary<string, List<string>>();
 
@@ -17,7 +19,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         public Dictionary<string, List<string>> firstPlus = new Dictionary<string, List<string>>();
 
         List<string> allLexem = new List<string>();
-        public string[,] matrix;
+        public string[,] Matrix { get; private set; }
         public List<string> terminals = new List<string>();
 
 
@@ -64,6 +66,181 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             }
         }
 
+
+        /// <summary>
+        /// недороблео
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        string DetermineReleation(string first,string second)
+        {
+            if (first == null || first == "") throw new Exception("First parametr doesn`t dermine");
+            if (second == null || second == "") throw new Exception("Second parametr doesn`t dermine");
+
+            string result="";
+
+            if (first == "#") result =  "<";
+            if (second == "#") result= ">";
+
+            if (equals.Keys.Contains(first)&&equals[first].Contains(second))
+                result+= "=";
+
+            if (Less(first, second))
+                result += "<";
+
+            if (More(first, second))
+                result += ">";
+
+            if (result.Length > 1)
+                Console.WriteLine("error " + result+"relation in [" + first + " " + second + "]");
+
+            return result;
+        }
+
+        public void BuildMatrix1(DataGridView table)
+        {
+            foreach (RightPart lp in Grammar.Values)
+                foreach (string[] lexems in lp.Paralel)
+                    foreach (string lexem in lexems)
+                    {
+                        //lexem.Trim(' ');
+                        if (!allLexem.Contains(lexem)) allLexem.Add(lexem);
+                    }
+            allLexem.Add("#");
+
+            foreach (string lexem in allLexem)
+                if (!(lexem.Contains('<') && lexem.Contains('>')))
+                    terminals.Add(lexem);
+
+            Console.WriteLine ("text parsered");
+            int size = allLexem.Count;
+            Matrix = new string[size + 1, size + 1];
+
+            for (int i = 0; i < size; i++)
+            {
+                Matrix[0, i] = allLexem[i];
+                Matrix[i, 0] = allLexem[i];
+
+            }
+
+            FindingEqluals();
+            FindingFirstPlus();
+            FindingLastPlus();
+
+
+            for (int i = 0; i < size; i++)
+                if (equals.Keys.Contains(Matrix[i, 0]))
+                    for (int j = 0; j < size; j++)
+                        if (equals[Matrix[i, 0]].Contains(Matrix[0, j]))
+                            Matrix[i + 1, j + 1] = "=";
+
+            for (int i = 0; i <= size; i++)
+                for (int j = 0; j <= size; j++)
+                    if (Less(Matrix[i, 0], Matrix[0, j]))
+                        Matrix[i + 1, j + 1] += "<";
+
+            for (int i = 0; i <= size; i++)
+                for (int j = 0; j <= size; j++)
+                    if (More(Matrix[i, 0], Matrix[0, j]))
+                        Matrix[i + 1, j + 1] += ">";
+
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                    if (Matrix[i + 1, j + 1] != null)
+                        if (Matrix[i + 1, j + 1].Length > 1)
+                            Console.WriteLine("error " + Matrix[i + 1, j + 1] + " in [" + Matrix[i, 0] + " " + Matrix[0, j] + "]");
+
+
+
+            Console.WriteLine("relation was build ");
+            for (int i = 1; i < size ; i++)
+                Matrix[i, size] = ">";
+
+            for (int i = 0; i < size; i++)
+                Matrix[ size ,i] = "<";
+
+            table.ColumnCount = size+1;
+            for (int i = 1; i <= size; i++)
+            {
+                table.Rows.Add();
+                for (int j = 1; j <= size; j++)
+                {
+                    table.Rows[i - 1].Cells[j - 1].Value = Matrix[i, j];
+                }
+
+            }
+
+
+            int counter = 0;
+            foreach (DataGridViewRow row in table.Rows)
+                row.HeaderCell.Value = Matrix[0, counter++];
+
+            counter = 0;
+            foreach (DataGridViewColumn column in table.Columns)
+                column.HeaderText = Matrix[0, counter++];
+
+        }
+
+        public void BuildMatrix2(DataGridView table)
+        {
+            foreach (RightPart lp in Grammar.Values)
+                foreach (string[] lexems in lp.Paralel)
+                    foreach (string lexem in lexems)
+                    {
+                        //lexem.Trim(' ');
+                        if (!allLexem.Contains(lexem)) allLexem.Add(lexem);
+                    }
+            allLexem.Add("#");
+
+            foreach (string lexem in allLexem)
+                if (!(lexem.Contains('<') && lexem.Contains('>')))
+                    terminals.Add(lexem);
+
+            Console.WriteLine("text parsered");
+            int size = allLexem.Count;
+            Matrix = new string[size + 1, size + 1];
+
+            for (int i = 1; i < size+1; i++)
+            {
+                Matrix[0, i] = allLexem[i-1];
+                Matrix[i, 0] = allLexem[i-1];
+
+            }
+
+            FindingEqluals();
+            FindingFirstPlus();
+            FindingLastPlus();
+
+            for (int i = 1; i < size+1; i++)
+                for (int j = 1; j < size+1; j++)
+                    Matrix[i, j] =DetermineReleation(Matrix[i, 0], Matrix[0, j]);
+
+            
+            Console.WriteLine("relation was build ");
+
+            table.ColumnCount = size + 1;
+            for (int i = 1; i < size+1; i++)
+            {
+                table.Rows.Add();
+                for (int j = 1; j < size+1; j++)
+                {
+                    table.Rows[i].Cells[j].Value = Matrix[i, j];
+                }
+
+            }
+
+
+            int counter = 0;
+            foreach (DataGridViewRow row in table.Rows)
+                row.HeaderCell.Value = Matrix[0, counter++];
+
+            counter = 0;
+            foreach (DataGridViewColumn column in table.Columns)
+                column.HeaderText = Matrix[0, counter++];
+
+        }
+
         public void BuildMatrix(DataGridView table)
         {
             foreach (RightPart lp in Grammar.Values)
@@ -79,13 +256,15 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                     terminals.Add(lexem);
 
             MessageBox.Show("text parsered");
-            int size = allLexem.Count;
-            matrix = new string[size + 1, size + 1];
 
-            for (int i = 0; i < size; i++)
+            allLexem.Add("#");
+            int size = allLexem.Count;
+            Matrix = new string[size + 1, size + 1];
+
+            for (int i = 1; i < size+1; i++)
             {
-                matrix[0, i] = allLexem[i];
-                matrix[i, 0] = allLexem[i];
+                Matrix[0, i] = allLexem[i-1];
+                Matrix[i, 0] = allLexem[i-1];
 
             }
 
@@ -95,50 +274,50 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             FindingLastPlus();
 
 
+            //for (int i = 1; i < size+1; i++)
+            //    if (equals.Keys.Contains(Matrix[i, 0]))
+            //        for (int j = 1; j < size; j++)
+            //            if (equals[Matrix[i, 0]].Contains(Matrix[0, j]))
+            //                Matrix[i, j] = "=";
+
+            //for (int i = 1; i < size+1; i++)
+            //    for (int j = 1; j < size+1; j++)
+            //        if (Less(Matrix[i, 0], Matrix[0, j]))
+            //            Matrix[i, j] += "<";
+
+            //for (int i = 1; i < size+1; i++)
+            //    for (int j = 1; j < size+1; j++)
+            //        if (More(Matrix[i, 0], Matrix[0, j]))
+            //            Matrix[i, j] += ">";
+
+            //for (int i = 1; i < size+1; i++)
+            //    for (int j = 1; j < size+1; j++)
+            //        if (Matrix[i, j] != null)
+            //            if (Matrix[i, j].Length > 1) MessageBox.Show("error " + Matrix[i, j] + " in [" + Matrix[i, 0] + " " + Matrix[0, j] + "]");
+
+            //MessageBox.Show("equils relation was build ");
+            for (int i = 1; i < size + 1; i++)
+                for (int j = 1; j < size + 1; j++)
+                    Matrix[i, j] = DetermineReleation(Matrix[i, 0], Matrix[0, j]);
+
+            table.ColumnCount = size+2;
             for (int i = 0; i < size; i++)
-                if (equals.Keys.Contains(matrix[i, 0]))
-                    for (int j = 0; j < size; j++)
-                        if (equals[matrix[i, 0]].Contains(matrix[0, j]))
-                            matrix[i + 1, j + 1] = "=";
-
-            for (int i = 0; i <= size; i++)
-                for (int j = 0; j <= size; j++)
-                    if (Less(matrix[i, 0], matrix[0, j]))
-                        matrix[i + 1, j + 1] += "<";
-
-            for (int i = 0; i <= size; i++)
-                for (int j = 0; j <= size; j++)
-                    if (More(matrix[i, 0], matrix[0, j]))
-                        matrix[i + 1, j + 1] += ">";
-
-            for (int i = 0; i < size; i++)
-                for (int j = 0; j < size; j++)
-                    if (matrix[i + 1, j + 1] != null)
-                        if (matrix[i + 1, j + 1].Length > 1) MessageBox.Show("error " + matrix[i + 1, j + 1] + " in [" + matrix[i, 0] + " " + matrix[0, j] + "]");
-
-            MessageBox.Show("equils relation was build ");
-
-
-            table.ColumnCount = size;
-            for (int i = 1; i <= size; i++)
             {
                 table.Rows.Add();
-                for (int j = 1; j <= size; j++)
+                for (int j = 0; j < size; j++)
                 {
-                    table.Rows[i - 1].Cells[j - 1].Value = matrix[i, j];
-
+                    table.Rows[i].Cells[j].Value = Matrix[i+1, j+1];
                 }
 
             }
-            int counter = 0;
-            foreach (DataGridViewRow row in table.Rows)
-                row.HeaderCell.Value = matrix[0, counter++];
-            counter = 0;
-            foreach (DataGridViewColumn column in table.Columns)
-                column.HeaderText = matrix[0, counter++];
+            
+            for(int i = 0; i < size; i++)
+            {
+                table.Rows[i].HeaderCell.Value = Matrix[0, i+1];
+                table.Columns[i].HeaderCell.Value = Matrix[0, i+1];
+            }
 
         }
-
         public List<string> First(string u)
         {
             List<string> result = new List<string>();

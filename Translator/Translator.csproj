@@ -57,6 +57,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ControlWriter.cs" />
+    <Compile Include="Grammar.cs" />
+    <Compile Include="ISymbol.cs" />
     <Compile Include="LexicalAnalyser\LexemEnum.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\AscendingAnalys.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\RealtionMatrix.cs" />
@@ -67,7 +70,7 @@
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\RelationTable.Designer.cs">
       <DependentUpon>RelationTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="SyntaxAnalyser\AscendingAnalysis\RightPart.cs" />
+    <Compile Include="RightPart.cs" />
     <Compile Include="SyntaxAnalyser\ISyntaxAnalyser.cs" />
     <Compile Include="SyntaxAnalyser\RecursiveDescentParser\AtLeastOne.cs" />
     <Compile Include="SyntaxAnalyser\RecursiveDescentParser\Consecutive.cs" />

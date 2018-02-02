@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-   public class Lexem
+   public class Lexem:ISymbol
     {
         public int Row { get; }
         public string Substring { get; }

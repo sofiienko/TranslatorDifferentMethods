@@ -53,8 +53,8 @@
 
         <GridSplitter Grid.Row="2"  ShowsPreview="False" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
 
-        <RichTextBox Name="consoleBox" Grid.Row="3">
-        </RichTextBox>
+        <TextBox Name="consoleBox" Grid.Row="3">
+        </TextBox>
 
     </Grid>
 </Window>
