@@ -38,5 +38,10 @@ namespace Translator
             else if (indexIdnt == null && indexConst != null) this.IndexConst = indexConst;
             else throw new Exception("You can`t add parametr indexIdnt and indexConst in samerime");
         }
+
+        public override string ToString()
+        {
+            return Substring;
+        }
     }
 }

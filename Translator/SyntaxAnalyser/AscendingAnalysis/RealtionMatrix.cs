@@ -67,12 +67,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         }
 
 
-        /// <summary>
-        /// недороблео
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
         string DetermineReleation(string first,string second)
         {
             if (first == null || first == "") throw new Exception("First parametr doesn`t dermine");
@@ -168,7 +162,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 {
                     table.Rows[i - 1].Cells[j - 1].Value = Matrix[i, j];
                 }
-
             }
 
 
@@ -182,72 +175,14 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
         }
 
-        public void BuildMatrix2(DataGridView table)
-        {
-            foreach (RightPart lp in Grammar.Values)
-                foreach (string[] lexems in lp.Paralel)
-                    foreach (string lexem in lexems)
-                    {
-                        //lexem.Trim(' ');
-                        if (!allLexem.Contains(lexem)) allLexem.Add(lexem);
-                    }
-            allLexem.Add("#");
-
-            foreach (string lexem in allLexem)
-                if (!(lexem.Contains('<') && lexem.Contains('>')))
-                    terminals.Add(lexem);
-
-            Console.WriteLine("text parsered");
-            int size = allLexem.Count;
-            Matrix = new string[size + 1, size + 1];
-
-            for (int i = 1; i < size+1; i++)
-            {
-                Matrix[0, i] = allLexem[i-1];
-                Matrix[i, 0] = allLexem[i-1];
-
-            }
-
-            FindingEqluals();
-            FindingFirstPlus();
-            FindingLastPlus();
-
-            for (int i = 1; i < size+1; i++)
-                for (int j = 1; j < size+1; j++)
-                    Matrix[i, j] =DetermineReleation(Matrix[i, 0], Matrix[0, j]);
-
-            
-            Console.WriteLine("relation was build ");
-
-            table.ColumnCount = size + 1;
-            for (int i = 1; i < size+1; i++)
-            {
-                table.Rows.Add();
-                for (int j = 1; j < size+1; j++)
-                {
-                    table.Rows[i].Cells[j].Value = Matrix[i, j];
-                }
-
-            }
-
-
-            int counter = 0;
-            foreach (DataGridViewRow row in table.Rows)
-                row.HeaderCell.Value = Matrix[0, counter++];
-
-            counter = 0;
-            foreach (DataGridViewColumn column in table.Columns)
-                column.HeaderText = Matrix[0, counter++];
-
-        }
 
         public void BuildMatrix(DataGridView table)
         {
+            allLexem.Add(Grammar.First().Key);
             foreach (RightPart lp in Grammar.Values)
                 foreach (string[] lexems in lp.Paralel)
                     foreach (string lexem in lexems)
                     {
-                        //lexem.Trim(' ');
                         if (!allLexem.Contains(lexem)) allLexem.Add(lexem);
                     }
 
@@ -255,7 +190,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 if (!(lexem.Contains('<') && lexem.Contains('>')))
                     terminals.Add(lexem);
 
-            MessageBox.Show("text parsered");
+
+            Console.WriteLine("text parsered");
 
             allLexem.Add("#");
             int size = allLexem.Count;
@@ -273,29 +209,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             FindingFirstPlus();
             FindingLastPlus();
 
-
-            //for (int i = 1; i < size+1; i++)
-            //    if (equals.Keys.Contains(Matrix[i, 0]))
-            //        for (int j = 1; j < size; j++)
-            //            if (equals[Matrix[i, 0]].Contains(Matrix[0, j]))
-            //                Matrix[i, j] = "=";
-
-            //for (int i = 1; i < size+1; i++)
-            //    for (int j = 1; j < size+1; j++)
-            //        if (Less(Matrix[i, 0], Matrix[0, j]))
-            //            Matrix[i, j] += "<";
-
-            //for (int i = 1; i < size+1; i++)
-            //    for (int j = 1; j < size+1; j++)
-            //        if (More(Matrix[i, 0], Matrix[0, j]))
-            //            Matrix[i, j] += ">";
-
-            //for (int i = 1; i < size+1; i++)
-            //    for (int j = 1; j < size+1; j++)
-            //        if (Matrix[i, j] != null)
-            //            if (Matrix[i, j].Length > 1) MessageBox.Show("error " + Matrix[i, j] + " in [" + Matrix[i, 0] + " " + Matrix[0, j] + "]");
-
-            //MessageBox.Show("equils relation was build ");
             for (int i = 1; i < size + 1; i++)
                 for (int j = 1; j < size + 1; j++)
                     Matrix[i, j] = DetermineReleation(Matrix[i, 0], Matrix[0, j]);
@@ -344,9 +257,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                     if (!result.Contains(e))
                         result.Add(e);
 
-            //   result.AddRange(First(result[i]));
-            //foreach (var i in result)
-            //    first.AddRange(First(i));
 
             return result;
         }
@@ -426,46 +336,47 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         public void InitializeGeammar()
         {
             string input =
-                "<програма># program id <ПнНР> begin <ПнНР> <СО> end\n" +//changed
-                "<ПнНР># <ПерехідНаНовуСтроку>\n" +
-                //   "<НР># <ПнНР>\n" +
-                "<ПерехідНаНовуСтроку># ¶ | <ПерехідНаНовуСтроку> ¶\n" +
-                "<СО># <CписокОператорів>\n" +
-                 "<CписокОператорів># <опертор> ¶|<CписокОператорів> <опертор> ¶\n" +//changed
-                                                                                     //"<CписокОператорів># <опертор> <ПнНР>|<CписокОператорів> <опертор> <ПнНР>\n" +//changed
-                                                                                     //"<CписокОператорів># <опертор> | <CписокОператорів> <ПнНР> <опертор>\n" +
-                "<опертор># id = <вираз1> |" +
-                "read ( <сп1> )|" +
-                "write ( <сп1> )|" +
-                "do while [ <логічийВираз1> ] <СО>  enddo |" +
-                "if [ <логічнийВираз1> ] then <ПнНР> <СО> fi |" +//
-                "іd = [ <логічнийВираз1> ] ? <вираз1> : <вираз1> |" +
-                "<тип> id = <вираз1>\n" +
+                "<program># program <NL> begin <NL> <OL> end <NL>\n" +//changed
+                //"<name># id .\n" +
+                "<NL># <NewLine>\n" +
+                //   "<НР># <NL>\n" +
+                "<NewLine># ¶ | <NewLine> ¶\n" +
+                "<OL># <OperatorList>\n" +
+                 "<OperatorList># <operator> ¶ | <OperatorList> <operator> ¶\n" +//changed
+                                                                                     //"<OperatorList># <operator> <NL>|<OperatorList> <operator> <NL>\n" +//changed
+                                                                                     //"<OperatorList># <operator> | <OperatorList> <NL> <operator>\n" +
+                "<operator># id = <expression1> |" +
+                "read ( <il1> ) |" +
+                "write ( <il1> ) |" +
+                "do while [ <logicalExpression1> ] <NL> <OL>  enddo |" +
+                "if [ <logicalExpression1> ] then <NL> <OL> fi |" +//
+                "id = [ <logicalExpression1> ] ? <expression1> : <expression1> |" +
+                "<type> id = <expression1>\n" +
 
-                "<сп1>#<списокІдентифікаторів>\n" +
-                "<списокІдентифікаторів># id | <списокІдентифікаторів>\n" +
+                "<il1>#<idList>\n" +
+                "<idList># , id | <idList>\n" +
 
-                "<логічнийВираз1># <логічнийВираз>\n" +
-                "<логічнийВираз># <логічнийТерм1> | <логічнийВираз> or <логічниТерм1> \n" +
+                "<logicalExpression1># <logicalExpression>\n" +
+                "<logicalExpression># <logicalTerm1> | <logicalExpression> or <logicalTerm1> \n" +
 
-                "<логічнийТерм1># <логічнийТерм>\n" +
-                "<логічнийТерм># <логічнийМножник1> | <логічнийТерм> and <логічнаМножник1>\n" +
+                "<logicalTerm1># <logicalTerm>\n" +
+                "<logicalTerm># <logicalMultiple1> | <logicalTerm> and <logicalMultiple1>\n" +
 
-                "<логічнийМножник1># <логічнийМножник> \n" +
-                "<логічнийМножник># <відношення> | not <логічнийМножник> | [ <логічнийВираз1> ] \n" +//changed
+                "<logicalMultiple1># <logicalMultiple> \n" +
+                "<logicalMultiple># <relation> | not <logicalMultiple> | [ <logicalExpression1> ] \n" +//changed
 
-                "<відношення># <вираз> <знакВідношення> <вираз1>\n" +
-                "<знакВідношення># !=| <= | >= | < | > |== \n" +
+                "<relation># <expression> <relationSign> <expression1>\n" +
+                "<relationSign># != | <= | >= | < | > | == \n" +
 
-                "<вираз1># <вираз>\n" +
-                "<вираз># <терм1> | <вираз> + <терм1>| <вираз> - <терм1>\n" +
+                "<expression1># <expression>\n" +
+                "<expression># <term1> | <expression> + <term1>| <expression> - <term1>\n" +
 
-                "<терм1># <терм> \n" +
-                "<терм># <множина> | <терм> * <множина> |<терм> / <множина>\n" +
-                "<вираз2># <вираз>\n" +
-                "<множина># ( <вираз1> ) | idn | const\n" +
+                "<term1># <term> \n" +
+                "<term># <multiple> | <term> * <multiple> |<term> / <multiple>\n" +
+               // "<вираз2># <expression>\n" +
+                "<multiple># ( <expression1> ) | id | const\n" +
 
-                "<тип># int | float | unsigned int | unsigned float";
+                "<type># int | float | unsigned int | unsigned float";
 
             //string input =
             //    "Z#b M b \n" +
@@ -488,7 +399,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 "<T># <T> * <F> | <F>\n" +
                 "<F># ( <E> ) | i";
 
-            string input99 = "<program># program id <declaration_list1> begin <operator_list1> end.\n" +
+            string input99 = "<PROGRAM># program id <declaration_list1> begin <operator_list1> end.\n" +
              "<declaration_list># <declaration> ¶|<declaration_list> <declaration> ¶\n" +
              "<declaration># double <id_list1>|int <id_list1>\n" +
              "<id_list># , id|<id_list> , id\n" +
@@ -524,9 +435,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 string[] splitRow = row.Split('#');
                 Grammar.Add(splitRow[0], new RightPart(splitRow[1]));
             }
-
-
-
         }
     }
 }

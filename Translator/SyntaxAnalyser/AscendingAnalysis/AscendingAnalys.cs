@@ -1,8 +1,11 @@
-﻿using System;
+﻿//#define Release
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Translator.SyntaxAnalyser.AscendingAnalysis
 {
@@ -19,14 +22,13 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             relationMatrix.InitializeGeammar();
             relationMatrix.BuildMatrix(relationTableWindows.GetDataGridView);
-            relationTableWindows.Show();
+            //relationTableWindows.Show();
 
             return true;
         }
 
         public bool CheckSyntax(List<Lexem> listLexem)
         {
-
             ListLexem = (from lexem in listLexem
                          select
                          (lexem.Code == 38) ? "const" :  ///????
@@ -48,19 +50,26 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             string relation;
             var enumerator = ListLexem.GetEnumerator();
-            
-            foreach(var lexem in ListLexem)
+            bool isNext = enumerator.MoveNext() ;
+            while(isNext)
             {
-                Console.WriteLine("relation: "+ stack.Peek()+" " + lexem);
-                relation = GetRelation(stack.Peek(), lexem);
+//#if DEBUG
+//                Console.WriteLine("relation: "+ stack.Peek()+" " + enumerator.Current);
+//#endif
+
+                if (enumerator.Current == "#") break;
+                relation = GetRelation(stack.Peek(), enumerator.Current);
                 if (relation == "=" || relation == "<")
                 {
-                    stack.Push(lexem);
+                    stack.Push(enumerator.Current);
+                    isNext = enumerator.MoveNext();
                 }
                 else if (relation == ">") stack = ReplaceBase(stack);
                 else Console.WriteLine("oops,problem");
             }
 
+
+            Console.WriteLine("Verification completed successfully");
             return true;
         }
 
@@ -68,51 +77,48 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         {
             int length = relationMatrix.Matrix.GetLength(0);
             int i = 0;
+
             for (; i < length; i++)
                 if (relationMatrix.Matrix[i, 0] == firstLexem) break;
+            if (i >= length) throw new Exception("first lexem wasn`t found in realtion matrix");
+
 
             int j = 0;
             for (; j < length; j++)
-            {
-                //Console.WriteLine(relationMatrix.Matrix[0, j]??"null");
                 if (relationMatrix.Matrix[0, j] == secondLexem) break;// return relationMatrix.Matrix[0, j];
-            }
+            if (j >= length) throw new Exception("second lexem " + secondLexem + " wasn'е found");
 
 
-            Console.WriteLine("-->"+relationMatrix.Matrix[i, j]);
-             return (relationMatrix.Matrix[i, j]!="")? relationMatrix.Matrix[i, j]: throw new Exception("relation doesn`t exist between " + firstLexem + " and " + secondLexem);            
+
+            return (relationMatrix.Matrix[i, j]!="")? relationMatrix.Matrix[i, j]
+                : throw new Exception("relation doesn`t exist between " + firstLexem + " and " + secondLexem);            
         }
 
         Stack<string> ReplaceBase(Stack<string> stack)
         {
             Stack<string> newStack = new Stack<string>();
 
-
             string relation;
-            //var arrayFS = stack.Reverse().ToList();//array from stack
+
             var arrayFS = stack.ToList();//array from stack
-            //for (int i=arrayFS.Count-1;i>=1;i--)
+
             for (int i =1 ; i <= arrayFS.Count - 1; i++)
             {
-
-                //Console.WriteLine("r-->"+arrayFS[i-1]+" "+ arrayFS[i]);
-                Console.WriteLine("r-->" + arrayFS[i] + " " + arrayFS[i-1]);
-
-                //relation = GetRelation(arrayFS[i-1], arrayFS[i]);
+//#if DEBUG
+//                Console.WriteLine("r-->" + arrayFS[i] + " " + arrayFS[i-1]);
+//#endif
                 relation = GetRelation(arrayFS[i], arrayFS[i-1]);
                 if (relation == "<")
                 {
-                    //for (int j = i - 1; j >= 0; j--)
                     for (int j = arrayFS.Count - 1; j >=i ; j--)
                         newStack.Push(arrayFS[j]);
                     
                     newStack.Push(GetNotTerminal(arrayFS, i));
                     return newStack;
-                    //var part = stack.Reverse().ToList().Except(arrayFS).ToList();
-                    //newStack.Push(GetNotTerminal(part));
                 }
             }
-            return null;// newStack;
+
+            return null;
         }
 
         string GetNotTerminal(List<string> list,int end)
@@ -122,9 +128,10 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             for (int i = 0; i <= end - 1; i++)
                 part.Add(list[i]);
 
-
+            part.Reverse();
             foreach (var item in relationMatrix.Grammar)
-                if (item.Value.ContainsSequence(part)) return item.Key;
+                if (item.Value.ContainsSequence(part))
+                    return item.Key;
 
             return null;
         }

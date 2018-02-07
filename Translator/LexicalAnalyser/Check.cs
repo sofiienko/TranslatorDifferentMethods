@@ -12,7 +12,7 @@ namespace Translator.LexicalAnalyser
     {
         private static string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         private static string digits = "1234567890";
-        private static string separoters = "+*/?()[]:, ";//+Environment.NewLine;
+        private static string separoters = "+*/?(){}[]:, ";//+Environment.NewLine;
 
         static string[] reservedLexem = new string[]
         {
@@ -53,8 +53,8 @@ namespace Translator.LexicalAnalyser
             "idn",//34
             ",",
             "=",
-            "const"
-          //  "#"//38
+            "const",
+            //38
           
         };
 
