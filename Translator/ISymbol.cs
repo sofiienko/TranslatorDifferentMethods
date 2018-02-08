@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-    interface ISymbol
+   public interface ISymbol
     {
+        string Substring { get; }
     }
 }

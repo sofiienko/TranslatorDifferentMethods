@@ -66,12 +66,12 @@ namespace Translator
             try
             {
                 syntaxAnalyser.CheckSyntax(analyser.LexemList);
-        }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message+" "+ex.Source);
             }
-}
+    }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
         {

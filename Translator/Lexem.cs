@@ -36,7 +36,7 @@ namespace Translator
             this.Code = code;
             if (indexIdnt != null && indexConst == null) this.IndexIdnt = indexIdnt;
             else if (indexIdnt == null && indexConst != null) this.IndexConst = indexConst;
-            else throw new Exception("You can`t add parametr indexIdnt and indexConst in samerime");
+            else throw new Exception("You can`t add parametr indexIdnt and indexConst in sametime");
         }
 
         public override string ToString()
