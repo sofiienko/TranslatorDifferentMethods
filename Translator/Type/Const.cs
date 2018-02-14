@@ -8,6 +8,8 @@ namespace Translator
 {
     public class Const
     {
+        public  static List<Const> AllConstFromCode { get; set; }
+
         public float _Const { get; private set; }
         public int Index { get; private set; }
         public string Type { get; private set; }

@@ -9,5 +9,6 @@ namespace Translator
    public interface ISymbol
     {
         string Substring { get; }
+        string ToString();
     }
 }

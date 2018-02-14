@@ -3,15 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace Translator.SyntaxAnalyser.AscendingAnalysis
 {
-    class AscendingAnalys:ISyntaxAnalyser
+    class AscendingAnalys : ISyntaxAnalyser
     {
-        bool showRelationTable = false;
+        bool showRelationTable = true;
         public bool ShowRealtionTable
         {
             get { return showRelationTable; }
@@ -21,9 +18,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 if (showRelationTable == true) PrepareRelationMatrix();
             }
         }
-
-
-        private bool showParsingTable=true;
+        private bool showParsingTable = true;
         public bool ShowParsingTable
         {
             get { return showParsingTable; }
@@ -52,8 +47,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             relationMatrix.InitializeGeammar();
             relationMatrix.BuildMatrix(relationTableWindows.GetDataGridView);
 
-            if(showRelationTable)relationTableWindows.Show();
-            
+            if (showRelationTable) relationTableWindows.Show();
+
             return true;
         }
 
@@ -71,7 +66,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             PrepareRelationMatrix();
             Parse();
 
-            if(showParsingTable) new ParsingTableWindows(snapList).Show();
+            if (showParsingTable) new ParsingTableWindows(snapList).Show();
 
 
             return true;
@@ -79,7 +74,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
         bool Parse()
         {
-            
             var matrix = relationMatrix.Matrix;
 
             ListLexem.Add(new LexemB { Substring = "#" });
@@ -90,16 +84,15 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             string relation;
             var enumerator = ListLexem.GetEnumerator();
-            bool isNext = enumerator.MoveNext() ;
+            bool isNext = enumerator.MoveNext();
 
             int i = 0;
-            while(isNext)
+            while (!(stack.Peek().Substring == "<program>"))
             {
-//#if DEBUG
-//                Console.WriteLine("relation: "+ stack.Peek()+" " + enumerator.Current);
-//#endif
+                //#if DEBUG
+                //                Console.WriteLine("relation: "+ stack.Peek()+" " + enumerator.Current);
+                //#endif
 
-                if (enumerator.Current.Substring == "#") break;
                 relation = GetRelation(stack.Peek(), enumerator.Current);
 
                 currentSnap = new Snap(stack, relation, RemainderInputLexem(i));
@@ -111,20 +104,19 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                     i++;
                 }
                 else if (relation == ">") stack = ReplaceBase(stack);
-                else Console.WriteLine("oops,problem. Wrong relation between "+stack.Peek()+" and "+ enumerator.Current+" ( "+((Lexem)enumerator.Current).Row+ "row");
+                else Console.WriteLine("oops,problem. Wrong relation between " + stack.Peek() + " and " + enumerator.Current + " ( " + ((Lexem)enumerator.Current).Row + "row");
 
                 snapList.Add(currentSnap);
-                
+
             }
+            Console.WriteLine("Verification completed succsesfully");
 
-
-            Console.WriteLine("Verification completed successfully");
-            return true;
+            return false;
         }
 
-        List<ISymbol>  RemainderInputLexem(int i)
+        List<ISymbol> RemainderInputLexem(int i)
         {
-            
+
             List<ISymbol> newList = new List<ISymbol>();
             for (; i < ListLexem.Count; i++)
                 newList.Add(ListLexem[i]);
@@ -132,7 +124,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             return newList;
         }
 
-        string GetRelation(ISymbol firstLexem,ISymbol secondLexem)
+        string GetRelation(ISymbol firstLexem, ISymbol secondLexem)
         {
             int length = relationMatrix.Matrix.GetLength(0);
             int i = 0;
@@ -144,14 +136,14 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             int j = 0;
             for (; j < length; j++)
-                if (relationMatrix.Matrix[0, j] == secondLexem.Substring) break;// return relationMatrix.Matrix[0, j];
+                if (relationMatrix.Matrix[0, j] == secondLexem.Substring) break;
             if (j >= length) throw new Exception("second lexem " + secondLexem + " wasn't found");
 
 
             Lexem s_Lexem = secondLexem as Lexem;
             string row = (s_Lexem != null) ? s_Lexem.Row.ToString() : null;
-            return (relationMatrix.Matrix[i, j]!="")? relationMatrix.Matrix[i, j]
-                : throw new Exception("relation doesn`t exist between " + firstLexem + " and " + secondLexem+" ("+row+" row )");            
+            return (relationMatrix.Matrix[i, j] != "") ? relationMatrix.Matrix[i, j]
+                : throw new Exception("relation doesn`t exist between " + firstLexem + " and " + secondLexem + " (" + row + " row )");
         }
 
         Stack<ISymbol> ReplaceBase(Stack<ISymbol> stack)
@@ -162,17 +154,17 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             var arrayFS = stack.ToList();//array from stack
 
-            for (int i =1 ; i <= arrayFS.Count - 1; i++)
+            for (int i = 1; i <= arrayFS.Count - 1; i++)
             {
-//#if DEBUG
-//                Console.WriteLine("r-->" + arrayFS[i] + " " + arrayFS[i-1]);
-//#endif
-                relation = GetRelation(arrayFS[i], arrayFS[i-1]);
+                //#if DEBUG
+                //                Console.WriteLine("r-->" + arrayFS[i] + " " + arrayFS[i-1]);
+                //#endif
+                relation = GetRelation(arrayFS[i], arrayFS[i - 1]);
                 if (relation == "<")
                 {
-                    for (int j = arrayFS.Count - 1; j >=i ; j--)
+                    for (int j = arrayFS.Count - 1; j >= i; j--)
                         newStack.Push(arrayFS[j]);
-                    
+
                     newStack.Push(new LexemB { Substring = GetNotTerminal(arrayFS, i) });
                     return newStack;
                 }
@@ -181,11 +173,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             throw new Exception("Could not find base");
         }
 
-        string GetNotTerminal(List<ISymbol> list,int end)
+        string GetNotTerminal(List<ISymbol> list, int end)
         {
-
-            
-
             List<ISymbol> part = new List<ISymbol>();
             // for (int i = list.Count-1; i >= start; i--)
             for (int i = 0; i <= end - 1; i++)
@@ -196,9 +185,11 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             foreach (var item in relationMatrix.Grammar)
                 if (item.Value.ContainsSequence(part))
+                {
                     return item.Key;
+                }
 
-            throw new Exception("Сould not find noterminal for base: " + string.Join(", ",part));
+            throw new Exception("Сould not find noterminal for base: " + string.Join(", ", part));
         }
 
     }

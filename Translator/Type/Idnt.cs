@@ -8,6 +8,8 @@ namespace Translator.LexicalAnalyser
 {
    public class Idnt
     {
+        public static List<Const> AllIdnFromCode { get; set; }
+
         public string Name { get; private set; }
         public int Index { get; private set; }
         public string Type { get; private set; }

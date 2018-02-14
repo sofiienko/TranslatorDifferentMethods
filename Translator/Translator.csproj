@@ -59,8 +59,9 @@
     </ApplicationDefinition>
     <Compile Include="ControlWriter.cs" />
     <Compile Include="Grammar.cs" />
-    <Compile Include="ISymbol.cs" />
-    <Compile Include="LexemB.cs" />
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\RPN.cs" />
+    <Compile Include="Type\ISymbol.cs" />
+    <Compile Include="Type\LexemB.cs" />
     <Compile Include="LexicalAnalyser\LexemEnum.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\AscendingAnalys.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\ParsingTableWindows.xaml.cs">
@@ -96,9 +97,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Const.cs" />
-    <Compile Include="Lexem.cs" />
-    <Compile Include="Idnt.cs" />
+    <Compile Include="Type\Const.cs" />
+    <Compile Include="Type\Lexem.cs" />
+    <Compile Include="Type\Idnt.cs" />
     <Compile Include="LexicalAnalyser\Check.cs" />
     <Compile Include="LexicalAnalyser\DiagramOfState\DiagramOfStateAnalyser.cs" />
     <Compile Include="LexicalAnalyser\FiniteStateMachine\State.cs" />

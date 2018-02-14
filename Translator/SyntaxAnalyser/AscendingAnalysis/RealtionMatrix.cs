@@ -9,9 +9,7 @@ using System.Windows.Forms;
 namespace Translator.SyntaxAnalyser.AscendingAnalysis
 {
     class RealtionMatrix
-    {
-
-       // Dictionary<string, Dictionary<string,string>> matrix = new Dictionary<string, System.Collections.Generic.Dictionary<string,string>>();
+    {       
         public Dictionary<string, RightPart> Grammar = new Dictionary<string, RightPart>();
         public Dictionary<string, List<string>> equals = new Dictionary<string, List<string>>();
 
@@ -42,7 +40,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                         }
                 }
         }
-
         void FindingFirstPlus()
         {
             foreach (var left in Grammar.Keys)
@@ -53,8 +50,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             }
         }
-
-
         void FindingLastPlus()
         {
             foreach (var left in Grammar.Keys)
@@ -65,7 +60,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             }
         }
-
 
         string DetermineReleation(string first,string second)
         {
@@ -91,91 +85,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             return result;
         }
-
-        public void BuildMatrix1(DataGridView table)
-        {
-            foreach (RightPart lp in Grammar.Values)
-                foreach (string[] lexems in lp.Paralel)
-                    foreach (string lexem in lexems)
-                    {
-                        //lexem.Trim(' ');
-                        if (!allLexem.Contains(lexem)) allLexem.Add(lexem);
-                    }
-            allLexem.Add("#");
-
-            foreach (string lexem in allLexem)
-                if (!(lexem.Contains('<') && lexem.Contains('>')))
-                    terminals.Add(lexem);
-
-            Console.WriteLine ("text parsered");
-            int size = allLexem.Count;
-            Matrix = new string[size + 1, size + 1];
-
-            for (int i = 0; i < size; i++)
-            {
-                Matrix[0, i] = allLexem[i];
-                Matrix[i, 0] = allLexem[i];
-
-            }
-
-            FindingEqluals();
-            FindingFirstPlus();
-            FindingLastPlus();
-
-
-            for (int i = 0; i < size; i++)
-                if (equals.Keys.Contains(Matrix[i, 0]))
-                    for (int j = 0; j < size; j++)
-                        if (equals[Matrix[i, 0]].Contains(Matrix[0, j]))
-                            Matrix[i + 1, j + 1] = "=";
-
-            for (int i = 0; i <= size; i++)
-                for (int j = 0; j <= size; j++)
-                    if (Less(Matrix[i, 0], Matrix[0, j]))
-                        Matrix[i + 1, j + 1] += "<";
-
-            for (int i = 0; i <= size; i++)
-                for (int j = 0; j <= size; j++)
-                    if (More(Matrix[i, 0], Matrix[0, j]))
-                        Matrix[i + 1, j + 1] += ">";
-
-            for (int i = 0; i < size; i++)
-                for (int j = 0; j < size; j++)
-                    if (Matrix[i + 1, j + 1] != null)
-                        if (Matrix[i + 1, j + 1].Length > 1)
-                            Console.WriteLine("error " + Matrix[i + 1, j + 1] + " in [" + Matrix[i, 0] + " " + Matrix[0, j] + "]");
-
-
-
-            Console.WriteLine("relation was build ");
-            for (int i = 1; i < size ; i++)
-                Matrix[i, size] = ">";
-
-            for (int i = 0; i < size; i++)
-                Matrix[ size ,i] = "<";
-
-            table.ColumnCount = size+1;
-            for (int i = 1; i <= size; i++)
-            {
-                table.Rows.Add();
-                for (int j = 1; j <= size; j++)
-                {
-                    table.Rows[i - 1].Cells[j - 1].Value = Matrix[i, j];
-                }
-            }
-
-
-            int counter = 0;
-            foreach (DataGridViewRow row in table.Rows)
-                row.HeaderCell.Value = Matrix[0, counter++];
-
-            counter = 0;
-            foreach (DataGridViewColumn column in table.Columns)
-                column.HeaderText = Matrix[0, counter++];
-
-        }
-
-
+       
         public void BuildMatrix(DataGridView table)
         {
             allLexem.Add(Grammar.First().Key);
@@ -261,7 +171,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             return result;
         }
 
-
         public List<string> Last(string u)
         {
 
@@ -336,15 +245,12 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         public void InitializeGeammar()
         {
             string input =
-                "<program># program <NL> begin <NL> <OL> end <NL>\n" +//changed
-                //"<name># id .\n" +
+                "<program># program <NL> begin <NL> <OL> end <NL>\n" +
                 "<NL># <NewLine>\n" +
-                //   "<НР># <NL>\n" +
                 "<NewLine># ¶ | <NewLine> ¶\n" +
                 "<OL># <OperatorList>\n" +
-                 "<OperatorList># <operator> ¶ | <OperatorList> <operator> ¶\n" +//changed
-                                                                                     //"<OperatorList># <operator> <NL>|<OperatorList> <operator> <NL>\n" +//changed
-                                                                                     //"<OperatorList># <operator> | <OperatorList> <NL> <operator>\n" +
+                 "<OperatorList># <operator> ¶ | <OperatorList> <operator> ¶\n" +
+                                                                                                                                                                         
                 "<operator># id = <expression1> |" +
                 "read ( <il1> ) |" +
                 "write ( <il1> ) |" +
@@ -373,33 +279,11 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
                 "<term1># <term> \n" +
                 "<term># <multiple> | <term> * <multiple> |<term> / <multiple>\n" +
-               // "<вираз2># <expression>\n" +
                 "<multiple># ( <expression1> ) | id | const\n" +
 
                 "<type># int | float | unsigned int | unsigned float";
 
-            //string input =
-            //    "Z#b M b \n" +
-            //    "M# ( L | a\n" +
-            //    "L# M a )";
-
-            string input3 =
-                "<огоголошення>#<сп.ід.> <тип>\n" +
-                "<сп.ід.>#id | <сп.ід.> , id\n" +
-                "<тип># real|integer";
-
-            string input4 = "<E1># <E>\n" +
-                "<E># <E> + <T1> | <T1>\n" +
-                "<T1># <T>\n" +
-                "<T># <T> * <F> | <F>\n" +
-                "<F># ( <E1> ) | i";
-
-            string input2 =
-                "<E># <E> + <T> | <T>\n" +
-                "<T># <T> * <F> | <F>\n" +
-                "<F># ( <E> ) | i";
-
-            string input99 = "<PROGRAM># program id <declaration_list1> begin <operator_list1> end.\n" +
+            string test = "<PROGRAM># program id <declaration_list1> begin <operator_list1> end.\n" +
              "<declaration_list># <declaration> ¶|<declaration_list> <declaration> ¶\n" +
              "<declaration># double <id_list1>|int <id_list1>\n" +
              "<id_list># , id|<id_list> , id\n" +

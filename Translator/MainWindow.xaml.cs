@@ -1,23 +1,14 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Translator.LexicalAnalyser;
-using Translator.LexicalAnalyser.DiagramOfState;
 using Translator.LexicalAnalyser.FiniteStateMachine;
 using Translator.SyntaxAnalyser;
 using Translator.SyntaxAnalyser.AscendingAnalysis;
-using Translator.SyntaxAnalyser.RecursiveDescentParser;
 
 namespace Translator
 {
@@ -32,7 +23,6 @@ namespace Translator
             
             Paragraph paragraph = this.codeTextBox.Document.Blocks.FirstBlock as Paragraph;
             paragraph.LineHeight = 8;
-
 
             Console.SetOut(new MultiTextWriter(new ControlWriter(consoleBox), Console.Out));
             //Console.OutputEncoding = Encoding.UTF8;
@@ -51,6 +41,8 @@ namespace Translator
 
             return listString;
         }
+
+
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             List<string> sourceCode =GetListStringFromRichTextBox(this.codeTextBox);
@@ -81,11 +73,12 @@ namespace Translator
         private void Open_Click(object sender, RoutedEventArgs e)
         {
 
+            TextRange range;
+            range = new TextRange(codeTextBox.Document.ContentStart, codeTextBox.Document.ContentEnd);
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+               range.Text = File.ReadAllText(openFileDialog.FileName);
         }
-
-
-
-
-
     }
 }
