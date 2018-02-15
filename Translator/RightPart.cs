@@ -19,7 +19,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 Paralel.Add(p.Split(splitter2, StringSplitOptions.RemoveEmptyEntries));
         }
 
-        public bool ContainsSequence(List<ISymbol> inputString)
+        public bool ContainsSequence(List<LexemB> inputString)
         {
 
             foreach (string[] sequence in Paralel)

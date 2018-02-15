@@ -28,11 +28,12 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 if (value == true || snapList != null) new ParsingTableWindows(snapList).Show();
             }
         }
-        List<ISymbol> ListLexem { get; set; }
+        List<LexemB> ListLexem { get; set; } = new List<LexemB>();
 
 
         public List<Snap> snapList;
         private Snap currentSnap;
+        public RPN rpn = new RPN();
 
         RelationTable relationTableWindows;
         RealtionMatrix relationMatrix;
@@ -57,11 +58,20 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             //ListLexem = listLexem.Cast<ISymbol>().ToList() ;
             snapList = new List<Snap>();
 
-            ListLexem = (from lexem in listLexem
-                         select
-                         (lexem.Code == 38) ? new LexemB { Substring = "const" } :  ///????
-                         (lexem.Code == 34) ? new LexemB { Substring = "id" } :
-                          new LexemB { Substring = lexem.Substring }).ToList<ISymbol>();
+            //ListLexem = (from lexem in listLexem
+            //             select
+            //             (lexem.Code == 38) ? new LexemB { Substring = "const" } :  ///????
+            //             (lexem.Code == 34) ? new LexemB { Substring = "id" } :
+            //              new LexemB { Substring = lexem.Substring }).ToList<LexemB>();
+
+
+            foreach (var item in listLexem)
+            {
+                if (item.Code == 38) item.Substring = "const";
+                if (item.Code == 34) item.Substring = "id";
+                ListLexem.Add(item);
+            }
+
 
             PrepareRelationMatrix();
             Parse();
@@ -79,7 +89,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             ListLexem.Add(new LexemB { Substring = "#" });
 
 
-            Stack<ISymbol> stack = new Stack<ISymbol>();
+            Stack<LexemB> stack = new Stack<LexemB>();
             stack.Push(new LexemB { Substring = "#" });
 
             string relation;
@@ -114,17 +124,17 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             return false;
         }
 
-        List<ISymbol> RemainderInputLexem(int i)
+        List<LexemB> RemainderInputLexem(int i)
         {
 
-            List<ISymbol> newList = new List<ISymbol>();
+            List<LexemB> newList = new List<LexemB>();
             for (; i < ListLexem.Count; i++)
                 newList.Add(ListLexem[i]);
 
             return newList;
         }
 
-        string GetRelation(ISymbol firstLexem, ISymbol secondLexem)
+        string GetRelation(LexemB firstLexem,LexemB secondLexem)
         {
             int length = relationMatrix.Matrix.GetLength(0);
             int i = 0;
@@ -146,9 +156,9 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 : throw new Exception("relation doesn`t exist between " + firstLexem + " and " + secondLexem + " (" + row + " row )");
         }
 
-        Stack<ISymbol> ReplaceBase(Stack<ISymbol> stack)
+        Stack<LexemB> ReplaceBase(Stack<LexemB> stack)
         {
-            Stack<ISymbol> newStack = new Stack<ISymbol>();
+            Stack<LexemB> newStack = new Stack<LexemB>();
 
             string relation;
 
@@ -173,9 +183,9 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             throw new Exception("Could not find base");
         }
 
-        string GetNotTerminal(List<ISymbol> list, int end)
+        string GetNotTerminal(List<LexemB> list, int end)
         {
-            List<ISymbol> part = new List<ISymbol>();
+            List<LexemB> part = new List<LexemB>();
             // for (int i = list.Count-1; i >= start; i--)
             for (int i = 0; i <= end - 1; i++)
                 part.Add(list[i]);
@@ -186,6 +196,9 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             foreach (var item in relationMatrix.Grammar)
                 if (item.Value.ContainsSequence(part))
                 {
+
+                    rpn.Add(part.ToArray());
+                    currentSnap.SetRPN(rpn.GetCurrentRPN());
                     return item.Key;
                 }
 

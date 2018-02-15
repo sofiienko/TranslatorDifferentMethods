@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-    class LexemB:ISymbol
+   public class LexemB: IEqualityComparer<LexemB>
     {
         public string Substring { get; set; }
 
@@ -19,15 +19,38 @@ namespace Translator
         {
             this.Substring = substring;
         }
-
-        public static ISymbol[] LexemBConstructor(params string[] lexemsText)
+        public LexemB()
+        { }
+        public static LexemB[] LexemBConstructor(params string[] lexemsText)
         {
-            ISymbol[] mass = new ISymbol[lexemsText.Length];
+            LexemB[] mass = new LexemB[lexemsText.Length];
 
             for (int i = 0; i < lexemsText.Length; i++)
                 mass[i] = new LexemB(lexemsText[i]);
 
             return mass;
+        }
+
+        public bool Equals(LexemB obj1, LexemB obj2)
+        {
+            if (obj1.Substring == obj2.Substring) return true;
+            else return false;
+        }
+
+        public int GetHashCode(LexemB lexemB)
+        {
+            return lexemB.Substring.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this.Substring == ((LexemB)obj).Substring) return true;
+            else return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Substring.GetHashCode();
         }
     }
 }

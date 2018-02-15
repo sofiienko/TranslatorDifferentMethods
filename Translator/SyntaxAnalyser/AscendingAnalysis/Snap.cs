@@ -16,10 +16,12 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         public string Base { get; private set; }
 
         public string Relation { get; private set; }
+
+        public string RPN { get; private set; }
         public string Input { get; private set; }
 
 
-        public Snap(Stack<ISymbol> stack,string relation, List<ISymbol> inputList)
+        public Snap(Stack<LexemB> stack,string relation, List<LexemB> inputList)
         {
             Number = counter++;
 
@@ -42,7 +44,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             Input = stringBuilder.ToString();
         }    
 
-        public void SetBase(List<ISymbol> baseList)
+        public void SetBase(List<LexemB> baseList)
         {
             StringBuilder stringBuilder = new StringBuilder();
             foreach (var element in baseList)
@@ -57,6 +59,11 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         public void SetRelation(string relation)
         {
             Relation = relation;
+        }
+
+        public void SetRPN(string rpn)
+        {
+            this.RPN = rpn;
         }
 
     }

@@ -60,7 +60,6 @@
     <Compile Include="ControlWriter.cs" />
     <Compile Include="Grammar.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\RPN.cs" />
-    <Compile Include="Type\ISymbol.cs" />
     <Compile Include="Type\LexemB.cs" />
     <Compile Include="LexicalAnalyser\LexemEnum.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\AscendingAnalys.cs" />

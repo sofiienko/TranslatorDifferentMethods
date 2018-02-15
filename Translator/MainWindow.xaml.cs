@@ -50,19 +50,21 @@ namespace Translator
             ILexicalAnalyser analyser =new FiniteMachine(sourceCode);
             analyser.Analize();
 
+            Const.AllConstFromCode = analyser.ConstantList;
+            Idnt.AllIdnFromCode = analyser.IdentifierList;
             if(showLexemTable.IsChecked) new LexemTable(analyser.LexemList, analyser.IdentifierList, analyser.ConstantList).Show();
 
 
             ISyntaxAnalyser syntaxAnalyser = new AscendingAnalys();
 
-            try
-            {
+            //try
+            //{
                 syntaxAnalyser.CheckSyntax(analyser.LexemList);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message+" "+ex.Source);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message+" "+ex.Source);
+            //}
     }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)

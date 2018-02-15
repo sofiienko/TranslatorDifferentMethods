@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-   public class Lexem:ISymbol
+   public class Lexem:LexemB,IEqualityComparer<LexemB>
     {
         public int Row { get; }
-        public string Substring { get; }
+        //public string Substring { get; }
         public int Code { get; }
 
         /// <summary>
@@ -42,6 +42,17 @@ namespace Translator
         public override string ToString()
         {
             return Substring;
+        }
+
+        public bool Equals(LexemB obj1, LexemB obj2)
+        {
+            if (obj1.Substring == obj2.Substring) return true;
+            else return false;
+        }
+
+        public int GetHashCode(LexemB lexemB)
+        {
+            return lexemB.Substring.GetHashCode();
         }
     }
 }
