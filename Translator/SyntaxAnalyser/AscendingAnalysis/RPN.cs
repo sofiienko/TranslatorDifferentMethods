@@ -34,44 +34,33 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             RPNdictionary.Add(LexemB.LexemBConstructor("<expression>", "+", "<term1>"), "+");
             RPNdictionary.Add(LexemB.LexemBConstructor("<expression>", "-", "<term1>"), "-");
             RPNdictionary.Add(LexemB.LexemBConstructor("id", "=", "<expression1>"), end);
-            RPNdictionary.Add(LexemB.LexemBConstructor("<type>","id", "=", "<expression1>"), end);
+            RPNdictionary.Add(LexemB.LexemBConstructor("<type>", "id", "=", "<expression1>"), end);
         }
 
-        public  List<string> Current { get; private set; } = new List<string>();
+        public List<string> Current { get; private set; } = new List<string>();
         static public List<string[]> AllRPN { get; private set; } = new List<string[]>();
 
         public void AddLexemToCurrentRPN(LexemB[] lexemList)
-        {            
-            try
+        {
+            string typeAction = GetValueByKey(lexemList);
+            if (typeAction == null) return;
+
+
+            if(typeAction ==cnst &&  lexemList[0] is Lexem constant)
+                Current.Add(Const.AllConstFromCode.Find(c => c.Index == constant.IndexConst)._Const.ToString());
+
+            else  if (typeAction == idn && lexemList[0] is Lexem identifier)
+                Current.Add(Idnt.AllIdnFromCode.Find(c => c.Index == identifier.IndexIdnt).Name.ToString());
+
+            else if (typeAction == end)
             {
-                string temp = GetValueByKey(lexemList);
-                if (temp == null) return;
-                if (temp == idn||temp==cnst)
-                {
-                    if (lexemList[0] is Lexem temp2)
-                    {
-                        if(temp==cnst)Current.Add(Const.AllConstFromCode.Find(c=>c.Index==temp2.IndexConst)._Const.ToString());
-                        if (temp == idn) Current.Add(Idnt.AllIdnFromCode.Find(c => c.Index == temp2.IndexIdnt).Name);
-                    }
-                }
-                else if (temp == end)
-                {
-                    AllRPN.Add(Current.ToArray());
-                    Current = new List<string>();
-                }
-                else
-                {
-                    Current.Add(temp);
-                }
+                AllRPN.Add(Current.ToArray());
+                Current = new List<string>();
             }
-            catch (KeyNotFoundException)
-            {
-                return;
-            }
-            
+            else Current.Add(typeAction);
         }
 
-        string GetValueByKey(LexemB[] mass)
+         string GetValueByKey(LexemB[] mass)
         {
             foreach(var item in RPNdictionary)
             {
@@ -89,6 +78,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             }
             return null;
         }
+
+
 
          public string CurrentRPNtoString()
         {
