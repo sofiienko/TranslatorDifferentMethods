@@ -21,6 +21,10 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         static string end = ")E(";
 
 
+
+        /// <summary>
+        ///  Here should write rules for RPN
+        /// </summary>
         static RPN()
         {
             RPNdictionary.Add(LexemB.LexemBConstructor("id"), idn);
@@ -31,17 +35,16 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             RPNdictionary.Add(LexemB.LexemBConstructor("<expression>", "-", "<term1>"), "-");
             RPNdictionary.Add(LexemB.LexemBConstructor("id", "=", "<expression1>"), end);
             RPNdictionary.Add(LexemB.LexemBConstructor("<type>","id", "=", "<expression1>"), end);
-
         }
 
         public  List<string> Current { get; private set; } = new List<string>();
         static public List<string[]> AllRPN { get; private set; } = new List<string[]>();
 
-        public void Add(LexemB[] lexemList)
-        {
+        public void AddLexemToCurrentRPN(LexemB[] lexemList)
+        {            
             try
             {
-                string temp = GetValue( lexemList);
+                string temp = GetValueByKey(lexemList);
                 if (temp == null) return;
                 if (temp == idn||temp==cnst)
                 {
@@ -60,8 +63,6 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 {
                     Current.Add(temp);
                 }
-
-
             }
             catch (KeyNotFoundException)
             {
@@ -70,7 +71,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             
         }
 
-        string GetValue(LexemB[] mass)
+        string GetValueByKey(LexemB[] mass)
         {
             foreach(var item in RPNdictionary)
             {
@@ -84,13 +85,12 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                             break;
                         }
                     if (flag) return item.Value;
-
                 }
             }
             return null;
         }
 
-         public string GetCurrentRPN()
+         public string CurrentRPNtoString()
         {
             StringBuilder sb = new StringBuilder();
 

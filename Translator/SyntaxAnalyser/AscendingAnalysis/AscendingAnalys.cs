@@ -197,8 +197,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 if (item.Value.ContainsSequence(part))
                 {
 
-                    rpn.Add(part.ToArray());
-                    currentSnap.SetRPN(rpn.GetCurrentRPN());
+                    rpn.AddLexemToCurrentRPN(part.ToArray());
+                    currentSnap.SetRPN(rpn.CurrentRPNtoString());
                     return item.Key;
                 }
 

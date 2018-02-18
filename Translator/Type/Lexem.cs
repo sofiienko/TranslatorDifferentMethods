@@ -44,13 +44,13 @@ namespace Translator
             return Substring;
         }
 
-        public bool Equals(LexemB obj1, LexemB obj2)
+        public new  bool Equals(LexemB obj1, LexemB obj2)
         {
             if (obj1.Substring == obj2.Substring) return true;
             else return false;
         }
 
-        public int GetHashCode(LexemB lexemB)
+        public new int GetHashCode(LexemB lexemB)
         {
             return lexemB.Substring.GetHashCode();
         }
