@@ -59,7 +59,17 @@
     </ApplicationDefinition>
     <Compile Include="ControlWriter.cs" />
     <Compile Include="Grammar.cs" />
+    <Compile Include="Model\Alphabet.cs" />
+    <Compile Include="Model\Constant.cs" />
+    <Compile Include="Model\Identifier.cs" />
+    <Compile Include="Model\ISymbol.cs" />
+    <Compile Include="Model\Lexem.cs" />
+    <Compile Include="Model\NonTerminal.cs" />
+    <Compile Include="Model\Operator.cs" />
+    <Compile Include="Model\Terminal.cs" />
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\CalculationRPN.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\RPN.cs" />
+    <Compile Include="SyntaxAnalyser\AscendingAnalysis\SnapCalculationRPN.cs" />
     <Compile Include="Type\LexemB.cs" />
     <Compile Include="LexicalAnalyser\LexemEnum.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\AscendingAnalys.cs" />
@@ -139,6 +149,8 @@
     <EmbeddedResource Include="SyntaxAnalyser\AscendingAnalysis\RelationTable.resx">
       <DependentUpon>RelationTable.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Model\ModelDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -37,27 +37,20 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             RPNdictionary.Add(LexemB.LexemBConstructor("<type>", "id", "=", "<expression1>"), end);
         }
 
-        public List<string> Current { get; private set; } = new List<string>();
-        static public List<string[]> AllRPN { get; private set; } = new List<string[]>();
+        public List<LexemB> Current { get; private set; } = new List<LexemB>();
+        static public Dictionary<LexemB[],double> AllRPN { get; private set; } = new Dictionary<LexemB[],double>();
 
         public void AddLexemToCurrentRPN(LexemB[] lexemList)
         {
             string typeAction = GetValueByKey(lexemList);
             if (typeAction == null) return;
-
-
-            if(typeAction ==cnst &&  lexemList[0] is Lexem constant)
-                Current.Add(Const.AllConstFromCode.Find(c => c.Index == constant.IndexConst)._Const.ToString());
-
-            else  if (typeAction == idn && lexemList[0] is Lexem identifier)
-                Current.Add(Idnt.AllIdnFromCode.Find(c => c.Index == identifier.IndexIdnt).Name.ToString());
-
             else if (typeAction == end)
             {
-                AllRPN.Add(Current.ToArray());
-                Current = new List<string>();
+               // AllRPN.Add(Current.ToArray());
+                Current = new List<LexemB>();
             }
-            else Current.Add(typeAction);
+            else if (typeAction == cnst || typeAction == idn) Current.Add(lexemList[0]);
+            else Current.Add(new LexemB { Substring = typeAction });
         }
 
          string GetValueByKey(LexemB[] mass)
@@ -81,17 +74,41 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
 
 
-         public string CurrentRPNtoString()
+        private double Calculation(List<LexemB> list)
         {
+            
+            double result=0;
+            Stack<LexemB> stack = new Stack<LexemB>();
+            
+            for(int i=0;i<list.Count; i++)
+            {
+                
+            }
+            
+
+
+            return result;
+        }
+
+
+
+         public string CurrentRPNtoString()
+         {
             StringBuilder sb = new StringBuilder();
 
             foreach (var item in Current)
             {
-                sb.Append(item);
+                if (item is Lexem lexem)
+                {
+                    if (lexem.IndexConst != null) sb.Append(Const.AllConstFromCode.Find(c => c.Index == lexem.IndexConst)._Const.ToString());
+                    if (lexem.IndexIdnt!=null) sb.Append(Idnt.AllIdnFromCode.Find(c => c.Index == lexem.IndexIdnt).Name.ToString());
+                }                                    
+                else sb.Append(item);
+
                 sb.Append(" ");
             }
             return sb.ToString();
-        }
+         }
 
         
     }
