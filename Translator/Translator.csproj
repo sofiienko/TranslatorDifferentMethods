@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdapterFromOldToNewModel.cs" />
     <Compile Include="ControlWriter.cs" />
     <Compile Include="Grammar.cs" />
     <Compile Include="Model\Alphabet.cs" />
