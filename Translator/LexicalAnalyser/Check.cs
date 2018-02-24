@@ -67,8 +67,8 @@ namespace Translator.LexicalAnalyser
                 //if (lexem.Contains(substring)) return count;
                 else count++;
             }
-
-            return ((count > 0) && (count != 38)) ? count : -1;
+            return -1;
+            //return ((count > 0) && (count != 38)) ? count : -1;
         }
 
 

@@ -10,5 +10,12 @@ namespace Translator.Model
     {
        public  uint Number { get; set; }
        public uint Row { get; set; } 
+
+        public Lexem(uint number, uint row,string substring, TerminalCode code)
+            : base(substring, code)
+        {
+            this.Number = number;
+            this.Row = row;
+        }
     }
 }

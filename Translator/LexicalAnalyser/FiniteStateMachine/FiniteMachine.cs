@@ -36,10 +36,11 @@ namespace Translator.LexicalAnalyser.FiniteStateMachine
                 foreach (var line in SourceCode)
                 {
                     row++;
-                    List<LexicalUnit> tempList = new List<LexicalUnit>();
-                    for (int i = 0; i <= line.Length - 1;)
-                        // tos[0].Execute(ref row, line, null,ref i);
+                  //  List<LexicalUnit> tempList = new List<LexicalUnit>();
+
+                    for (int i = 0; i < line.Length;)
                         State.Execute(tos[0], ref row, line, null, ref i);
+
                     LexemList.Add(new Lexem(row, "¶", 3));
                 }
             }
@@ -189,14 +190,8 @@ namespace Translator.LexicalAnalyser.FiniteStateMachine
 
         Lexem MinusOrLexem(ref int row, string substring)
         {
-            // Lexem last = LexemList.Last<Lexem>();
-            // if (last.Code == 34 || last.Code == 26 || last.Code == 38)
-            //  {
             LexemList.Add(new Lexem(row, "-", 22));
             substring = substring.Remove(0, 1);
-            //  }
-            //     else throw new Exception();
-            //else    Constant(ref row, substring);
 
             return null;
         }

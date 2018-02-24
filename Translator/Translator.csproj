@@ -64,6 +64,7 @@
     <Compile Include="Model\Identifier.cs" />
     <Compile Include="Model\ISymbol.cs" />
     <Compile Include="Model\Lexem.cs" />
+    <Compile Include="Model\LexicalUnit.cs" />
     <Compile Include="Model\NonTerminal.cs" />
     <Compile Include="Model\Operator.cs" />
     <Compile Include="Model\Terminal.cs" />

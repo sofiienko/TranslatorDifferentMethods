@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-
-    
-    class Terminal : ISymbol
+    class LexicalUnit:ISymbol
     {
         public string Substring { get; set; }
-        public TerminalCode TerminalCode { get; set; }
+        public int Row { get; set; }
 
-        public Terminal(string substring,TerminalCode code)
+        public LexicalUnit(string substring, int row)
         {
             this.Substring = substring;
-            this.TerminalCode = code;
+            this.Row = row;
+
         }
     }
 }

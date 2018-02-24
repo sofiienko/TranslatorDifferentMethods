@@ -32,7 +32,7 @@ namespace Translator.LexicalAnalyser.DiagramOfState
                 {
                     row++;
                     List<LexicalUnit> tempList = new List<LexicalUnit>();
-                    for (int i = 0; i <= line.Length - 1; i++)
+                    for (int i = 0; i < line.Length; i++)
                     {
                         tempList.Add(State.State1(line, ref i, row, ""));
                     }
@@ -59,10 +59,12 @@ namespace Translator.LexicalAnalyser.DiagramOfState
                 //if we have this lexem in reserved lexem
                 tempInt = Check.IsReservedLexem(unit.Substring);
                 if (tempInt >= 0)
-                { LexemList.Add(new Lexem(unit.Row, unit.Substring, tempInt)); continue; }
+                {
+                    LexemList.Add(new Lexem(unit.Row, unit.Substring, tempInt));
+                    continue;
+                }
 
                 //if this lexem is a constant
-
                 if (float.TryParse(unit.Substring.Replace('.', ','), out tempFloat))
                 {
                     if (int.TryParse(unit.Substring, out tempInt))

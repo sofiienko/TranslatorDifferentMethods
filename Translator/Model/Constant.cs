@@ -8,12 +8,23 @@ namespace Translator.Model
 {
     class Constant : Lexem
     {
+
         public uint NumberInConstantList { get; private set; }
 
-        //todo:change terminal code to real code
-        public new const TerminalCode TerminalCode = 0;
+        public Constant(double Value, TerminalCode type, uint number, uint numberInConstList, uint row) :
+            base(number, row, Value.ToString(), TerminalCode.Constant)
+        {
 
-        //todo:change terminal code to real type
+            if (!(type == TerminalCode.Float ||
+                  type == TerminalCode.Int ||
+                  type == (TerminalCode.Unsigned & TerminalCode.Float) ||
+                  type == (TerminalCode.Unsigned & TerminalCode.Int)
+                  )) throw new Exception("Invalid type. Type must be TerminalCode.Int, TerminalCode.Float,TerminalCode.Unsigned& TerminalCode.Int,TerminalCode.Unsigned & TerminalCode.Float");
+
+            this.NumberInConstantList = NumberInConstantList;
+            this.Type = type;
+            this.Value = Value;
+        }
         public TerminalCode Type { get; private set; }
 
         public double  Value { get; set; }
