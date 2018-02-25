@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    interface ISymbol
+  public  interface ISymbol
     {
         string Substring { get; set; }
+
+        string ToString();
+        
     }
 }

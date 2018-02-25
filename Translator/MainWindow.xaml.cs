@@ -55,11 +55,15 @@ namespace Translator
             if(showLexemTable.IsChecked) new LexemTable(analyser.LexemList, analyser.IdentifierList, analyser.ConstantList).Show();
 
 
+
+
             ISyntaxAnalyser syntaxAnalyser = new AscendingAnalys();
+            AdapterFromOldToNewModel adapter = new AdapterFromOldToNewModel(analyser.LexemList,analyser.IdentifierList, analyser.ConstantList );
+
 
             //try
             //{
-                syntaxAnalyser.CheckSyntax(analyser.LexemList);
+                syntaxAnalyser.CheckSyntax(adapter.ModelLexemList);
             //}
             //catch (Exception ex)
             //{

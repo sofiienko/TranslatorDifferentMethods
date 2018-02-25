@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    class Identifier:Lexem
+  public  class Identifier:Lexem
     {
 
         public uint NumberInIdentifierList { get; private set; }

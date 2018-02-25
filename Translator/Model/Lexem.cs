@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    class Lexem:Terminal
+    interface IOperator { }
+ public   class Lexem:Terminal,IOperator
     {
        public  uint Number { get; set; }
        public uint Row { get; set; } 

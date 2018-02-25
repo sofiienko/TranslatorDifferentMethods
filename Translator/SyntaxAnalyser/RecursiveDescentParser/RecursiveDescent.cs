@@ -26,7 +26,15 @@ namespace Translator.SyntaxAnalyser.RecursiveDescentParser
 
             return true;
         }
+        public bool CheckSyntax(List<Model.Lexem> lexemList)
+        {
 
+            //LexemList = lexemList;
+            //InitalizeException();
+            //InitalizeSyntaxis();
+
+            return true;
+        }
         private void InitalizeException()
         {
             massExeption = new SyntaxException[]

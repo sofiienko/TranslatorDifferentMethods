@@ -8,7 +8,7 @@ namespace Translator.Model
 {
 
     
-    class Terminal : ISymbol
+ public   class Terminal : ISymbol
     {
         public string Substring { get; set; }
         public TerminalCode TerminalCode { get; set; }
@@ -17,6 +17,11 @@ namespace Translator.Model
         {
             this.Substring = substring;
             this.TerminalCode = code;
+        }
+
+        public override string ToString()
+        {
+            return this.Substring;
         }
     }
 }

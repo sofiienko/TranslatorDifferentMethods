@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    class Constant : Lexem
+ public   class Constant : Lexem
     {
 
         public uint NumberInConstantList { get; private set; }

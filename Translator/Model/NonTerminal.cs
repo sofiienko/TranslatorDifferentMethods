@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    class NonTerminal:ISymbol
+  public  class NonTerminal:ISymbol
     {
         public string Substring { get; set; }
-
+        public override string ToString()
+        {
+            return this.Substring;
+        }
     }
 }

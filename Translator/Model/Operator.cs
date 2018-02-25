@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    class Operator
+   public class Operator
     {
     }
 }

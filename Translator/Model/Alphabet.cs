@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    enum TerminalCode
+  public  enum TerminalCode
     {
         Pogram,
         Begin,
@@ -49,7 +49,7 @@ namespace Translator.Model
         Constant
 
     }
-    enum CharacterType
+  public  enum CharacterType
     {
           Letter,
           Digit,
@@ -61,7 +61,7 @@ namespace Translator.Model
           Not
     }
 
-    class Alphabet
+ public   class Alphabet
     {
         public static string[] ReservedLexem { get; } = new string[]
          {

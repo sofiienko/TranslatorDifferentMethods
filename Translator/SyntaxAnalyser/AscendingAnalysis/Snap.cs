@@ -21,7 +21,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         public string Input { get; private set; }
 
 
-        public Snap(Stack<LexemB> stack,string relation, List<LexemB> inputList)
+        public Snap(Stack<Model.ISymbol> stack,string relation, List<Model.ISymbol> inputList)
         {
             Number = counter++;
 
@@ -44,7 +44,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             Input = stringBuilder.ToString();
         }    
 
-        public void SetBase(List<LexemB> baseList)
+        public void SetBase(List<Model.ISymbol> baseList)
         {
             StringBuilder stringBuilder = new StringBuilder();
             foreach (var element in baseList)

@@ -28,8 +28,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 if (value == true || snapList != null) new ParsingTableWindows(snapList).Show();
             }
         }
-        List<LexemB> ListLexem { get; set; } = new List<LexemB>();
-
+        List<Model.ISymbol> ListLexem { get; set; } = new List<Model.ISymbol>();
 
         public List<Snap> snapList;
         private Snap currentSnap;
@@ -53,7 +52,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             return true;
         }
 
-        public bool CheckSyntax(List<Lexem> listLexem)
+        public bool CheckSyntax(List<Model.Lexem> listLexem)
         {
             //ListLexem = listLexem.Cast<ISymbol>().ToList() ;
             snapList = new List<Snap>();
@@ -67,8 +66,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             foreach (var item in listLexem)
             {
-                if (item.Code == 38) item.Substring = "const";
-                if (item.Code == 34) item.Substring = "id";
+                if (item is Model.Constant ) item.Substring = "const";
+                if (item is Model.Identifier) item.Substring = "id";
                 ListLexem.Add(item);
             }
 
@@ -81,16 +80,42 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             return true;
         }
+        public bool CheckSyntax(List<Model.ISymbol> listLexem)
+        {
+            //ListLexem = listLexem.Cast<ISymbol>().ToList() ;
+            snapList = new List<Snap>();
 
+            //ListLexem = (from lexem in listLexem
+            //             select
+            //             (lexem.Code == 38) ? new LexemB { Substring = "const" } :  ///????
+            //             (lexem.Code == 34) ? new LexemB { Substring = "id" } :
+            //              new LexemB { Substring = lexem.Substring }).ToList<LexemB>();
+
+
+            foreach (var item in listLexem)
+            {
+                if (item is Model.Constant constant) constant.Substring = "const";
+                if (item is Model.Identifier idn) idn.Substring = "id";
+                ListLexem.Add(item);
+            }
+
+
+            PrepareRelationMatrix();
+            Parse();
+
+            if (showParsingTable) new ParsingTableWindows(snapList).Show();
+
+
+            return true;
+        }
         bool Parse()
         {
             var matrix = relationMatrix.Matrix;
 
-            ListLexem.Add(new LexemB { Substring = "#" });
+            ListLexem.Add(new Model.NonTerminal { Substring = "#" });
 
-
-            Stack<LexemB> stack = new Stack<LexemB>();
-            stack.Push(new LexemB { Substring = "#" });
+            Stack<Model.ISymbol> stack = new Stack<Model.ISymbol>();
+            stack.Push(new Model.NonTerminal { Substring = "#" });
 
             string relation;
             var enumerator = ListLexem.GetEnumerator();
@@ -124,24 +149,24 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             return false;
         }
 
-        List<LexemB> RemainderInputLexem(int i)
+        List<Model.ISymbol> RemainderInputLexem(int i)
         {
 
-            List<LexemB> newList = new List<LexemB>();
+            List<Model.ISymbol> newList = new List<Model.ISymbol>();
             for (; i < ListLexem.Count; i++)
                 newList.Add(ListLexem[i]);
 
             return newList;
         }
 
-        string GetRelation(LexemB firstLexem,LexemB secondLexem)
+        string GetRelation(Model.ISymbol firstLexem,Model.ISymbol secondLexem)
         {
             int length = relationMatrix.Matrix.GetLength(0);
             int i = 0;
 
             for (; i < length; i++)
                 if (relationMatrix.Matrix[i, 0] == firstLexem.Substring) break;
-            if (i >= length) throw new Exception("first lexem wasn`t found in realtion matrix");
+            if (i >= length) throw new Exception("first lexem wasn`t found in relation matrix");
 
 
             int j = 0;
@@ -156,9 +181,9 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 : throw new Exception("relation doesn`t exist between " + firstLexem + " and " + secondLexem + " (" + row + " row )");
         }
 
-        Stack<LexemB> ReplaceBase(Stack<LexemB> stack)
+        Stack<Model.ISymbol> ReplaceBase(Stack<Model.ISymbol> stack)
         {
-            Stack<LexemB> newStack = new Stack<LexemB>();
+            Stack<Model.ISymbol> newStack = new Stack<Model.ISymbol>();
 
             string relation;
 
@@ -175,7 +200,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                     for (int j = arrayFS.Count - 1; j >= i; j--)
                         newStack.Push(arrayFS[j]);
 
-                    newStack.Push(new LexemB { Substring = GetNotTerminal(arrayFS, i) });
+                    newStack.Push(new Model.NonTerminal { Substring = GetNotTerminal(arrayFS, i) });
                     return newStack;
                 }
             }
@@ -183,9 +208,9 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             throw new Exception("Could not find base");
         }
 
-        string GetNotTerminal(List<LexemB> list, int end)
+        string GetNotTerminal(List<Model.ISymbol> list, int end)
         {
-            List<LexemB> part = new List<LexemB>();
+            List<Model.ISymbol> part = new List<Model.ISymbol>();
             // for (int i = list.Count-1; i >= start; i--)
             for (int i = 0; i <= end - 1; i++)
                 part.Add(list[i]);
@@ -197,7 +222,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 if (item.Value.ContainsSequence(part))
                 {
 
-                    rpn.AddLexemToCurrentRPN(part.ToArray());
+                    rpn.AddLexemsToCurrentRPN(part.ToArray());
                     currentSnap.SetRPN(rpn.CurrentRPNtoString());
                     return item.Key;
                 }

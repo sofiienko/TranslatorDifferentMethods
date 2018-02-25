@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    class LexicalUnit:ISymbol
+  public  class LexicalUnit:ISymbol
     {
         public string Substring { get; set; }
         public int Row { get; set; }

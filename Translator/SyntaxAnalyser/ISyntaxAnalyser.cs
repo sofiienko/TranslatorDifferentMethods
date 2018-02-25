@@ -8,6 +8,7 @@ namespace Translator.SyntaxAnalyser
 {
     interface ISyntaxAnalyser
     {
-        bool CheckSyntax(List<Lexem> lexemList);
+       // bool CheckSyntax(List<Lexem> lexemList);
+        bool CheckSyntax(List<Model.Lexem> lexemList);
     }
 }
