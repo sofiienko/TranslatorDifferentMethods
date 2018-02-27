@@ -12,25 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Translator.SyntaxAnalyser.AscendingAnalysis
+namespace Translator.SyntaxAnalyser
 {
     /// <summary>
-    /// Interaction logic for ParsingTableWindows.xaml
+    /// Interaction logic for RPNWindows.xaml
     /// </summary>
-    public partial class ParsingTableWindows : Window
+    public partial class RPNWindows : Window
     {
-        public ParsingTableWindows(System.Collections.IEnumerable enumerable)
+        public RPNWindows()
         {
             InitializeComponent();
-
-            ParsingTable.ItemsSource = enumerable;
-        }
-
-        public ParsingTableWindows(List<Snap> snapList)
-        {
-            InitializeComponent();
-
-            ParsingTable.ItemsSource = snapList;
         }
     }
 }

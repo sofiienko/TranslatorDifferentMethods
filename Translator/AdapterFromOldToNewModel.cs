@@ -13,6 +13,22 @@ namespace Translator
 
         public  AdapterFromOldToNewModel(List<Lexem> lexemList, List<Idnt> idntList, List<Const> constList)
         {
+            List<Model.IdentifierObject> idnObjList = new List<Model.IdentifierObject>();
+
+            uint index = 0;
+            foreach(var idn in idntList)
+            {
+                uint number =(uint) idn.Index;
+                string name = idn.Name;
+                Model.TerminalCode terminalCode = ConvertFromStrinToTerminalCode(idn.Type);
+
+                idnObjList.Add(new Model.IdentifierObject(name, null, terminalCode, index++));
+            }
+                
+
+
+
+
             int i = 0;
             foreach (var lexem in lexemList)
             {
@@ -27,13 +43,8 @@ namespace Translator
                 else if (lexem.Code == (int)Model.TerminalCode.Identifier)
                 {
                     string name = idntList[lexem.IndexIdnt.Value].Name;
-                    double? value =null;
 
-
-                    Model.TerminalCode type = ConvertFromStrinToTerminalCode(constList[lexem.IndexIdnt.Value].Type);
-                    uint number = (uint)i++;
-                    uint numberInIdntList = (uint)idntList[lexem.IndexIdnt.Value].Index;
-                    ModelLexemList.Add(new Model.Identifier(name,value,type,number,numberInIdntList, (uint)lexem.Row));
+                    ModelLexemList.Add(new Model.Identifier(idnObjList[lexem.IndexIdnt.Value],(uint)i++,(uint)lexem.Row));
                 }
                 else  ModelLexemList.Add(new Model.Lexem((uint)i++, (uint)lexem.Row, lexem.Substring, (Model.TerminalCode)lexem.Code));
 

@@ -34,6 +34,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         private Snap currentSnap;
         public RPN rpn = new RPN();
 
+
         RelationTable relationTableWindows;
         RealtionMatrix relationMatrix;
 
@@ -77,6 +78,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
             if (showParsingTable) new ParsingTableWindows(snapList).Show();
 
+
+            new ParsingTableWindows(RPN.AllRPN).Show();
 
             return true;
         }

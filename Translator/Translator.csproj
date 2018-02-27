@@ -63,15 +63,20 @@
     <Compile Include="Model\Alphabet.cs" />
     <Compile Include="Model\Constant.cs" />
     <Compile Include="Model\Identifier.cs" />
+    <Compile Include="Model\IdentifierObject.cs" />
     <Compile Include="Model\ISymbol.cs" />
     <Compile Include="Model\Lexem.cs" />
     <Compile Include="Model\LexicalUnit.cs" />
     <Compile Include="Model\NonTerminal.cs" />
     <Compile Include="Model\Operator.cs" />
+    <Compile Include="Model\SnapAbstract.cs" />
     <Compile Include="Model\Terminal.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\CalculationRPN.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\RPN.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\SnapCalculationRPN.cs" />
+    <Compile Include="SyntaxAnalyser\RPNWindows.xaml.cs">
+      <DependentUpon>RPNWindows.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Type\LexemB.cs" />
     <Compile Include="LexicalAnalyser\LexemEnum.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\AscendingAnalys.cs" />
@@ -129,6 +134,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SyntaxAnalyser\RPNWindows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -163,6 +172,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SyntaxAnalyser\PushdownAutomaton\" />
+    <Folder Include="syntaxHighlighting\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="example.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

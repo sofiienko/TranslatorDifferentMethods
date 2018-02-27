@@ -10,6 +10,25 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
     /// <summary>
     /// Lexem For Expression template
     /// </summary>
+    /// 
+    class RPNSnap
+    {
+     public   string RPN { get; private set; }
+     public   double Result { get; private set; }
+
+     public RPNSnap(string rpn ,double result)
+        {
+            this.RPN = rpn;
+            this.Result = result;
+        }
+
+        public override string ToString()
+        {
+            return RPN + " = " + Result;
+        }
+    }
+
+
     class LFET
     {
         public string Substring { get; set; }
@@ -76,12 +95,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
     class RPN
     {
         static Dictionary<LFET[], Operator> RPNdictionary { get; set; } = new Dictionary<LFET[], Operator>();
-
-        //workaround for indetifiсation id and constant
-        static string cnst = ")C(";
-        static string idn = ")I(";
-        static string end = ")E(";
-
+        static public List<RPNSnap> AllRPN{ get; private set; } = new List<RPNSnap>();
 
         /// <summary>
         ///  Here should write rules for RPN
@@ -94,12 +108,12 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             RPNdictionary.Add(LFET.LexemBConstructor("<term>", "/", "<multiple>"), new Operator("/"));
             RPNdictionary.Add(LFET.LexemBConstructor("<expression>", "+", "<term1>"), new Operator("+"));
             RPNdictionary.Add(LFET.LexemBConstructor("<expression>", "-", "<term1>"), new Operator("-"));
-            RPNdictionary.Add(LFET.LexemBConstructor("id", "=", "<expression1>"), new Operator("end"));
-            RPNdictionary.Add(LFET.LexemBConstructor("<type>", "id", "=", "<expression1>"), new Operator("end"));
+            RPNdictionary.Add(LFET.LexemBConstructor("id", "=", "<expression1>"), new Operator(/*"end"*/"assign"));
+            RPNdictionary.Add(LFET.LexemBConstructor("<type>", "id", "=", "<expression1>"), new Operator(/*"end"*/"declare"));
         }
 
         public List<IOperator> Current { get; private set; } = new List<IOperator>();
-        static public Dictionary<Lexem[],double> AllRPN { get; private set; } = new Dictionary<Lexem[],double>();
+        
 
         public void AddLexemsToCurrentRPN(Model.ISymbol[] inputLexemList)
         {
@@ -107,11 +121,24 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             if (typeAction == null) return; 
 
 
+            else if ((typeAction.Sign == "assign")&&(inputLexemList[0] is Model.Identifier idnt))
+            {
+                double calcultaionResult = Calculation(Current);
+                idnt.Value = calcultaionResult;
+                AllRPN.Add(new  RPNSnap( CurrentRPNtoString(),calcultaionResult));
+                Current = new List<IOperator>();
+            }
+
+            else if ((typeAction.Sign == "declare")&&(inputLexemList[1] is Model.Identifier idn))
+            {
+                double calcultaionResult= Calculation(Current);
+                idn.Value = calcultaionResult;
+                AllRPN.Add(new RPNSnap( CurrentRPNtoString(), Calculation(Current)));
+                Current = new List<IOperator>();
+            }
             else if (typeAction.Sign == "end")
             {
-
-                //todo:calculation add here
-               // AllRPN.Add(Current.ToArray());
+                //AllRPN.Add(CurrentRPNtoString(), calcultaionResult);
                 Current = new List<IOperator>();
             }
             else if (typeAction.Sign=="const" || typeAction.Sign =="idn") Current.Add((IOperator)inputLexemList[0]);
@@ -119,7 +146,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         }
 
          Operator GetActionValueByKey(Model.ISymbol[] mass)
-        {
+         {
             foreach(var item in RPNdictionary)
             {
                 if(mass.Length==item.Key.Length)
@@ -135,27 +162,34 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 }
             }
             return null;
-        }
+         }
 
-
-
-        private double Calculation(List<LexemB> list)
+        private double Calculation(List<IOperator> list)
         {
             
-            double result=0;
-            Stack<Model.Lexem> stack = new Stack<Model.Lexem>();
+            Stack<double> stack = new Stack<double>();
             
             for(int i=0;i<list.Count; i++)
             {
-                
+                if (list[i] is Model.Identifier id) stack.Push(id.Value.Value);
+                if (list[i] is Model.Constant c) stack.Push(c.Value);
+                if (list[i] is Operator oprator)
+                {
+                    double operant2 = stack.Pop();
+                    double operant1 = stack.Pop();
+                    double resultOperation=0;
+
+                    if (oprator.Sign == "*") resultOperation = Multiple(operant1, operant2);
+                    else if (oprator.Sign == "/") resultOperation = Devide(operant1, operant2);
+                    else if (oprator.Sign == "+") resultOperation = Plus(operant1, operant2);
+                    else if (oprator.Sign == "-") resultOperation = Minus(operant1, operant2);
+
+                    stack.Push(resultOperation);
+                }
             }
-            
-
-
-            return result;
+            if (stack.Count != 1) throw new Exception("Oops, problem with calcultation");
+            else return stack.Pop();
         }
-
-
 
          public string CurrentRPNtoString()
          {
@@ -176,6 +210,33 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             return sb.ToString();
          }
 
-        
+
+        public double Multiple(double operant1,double operant2)
+        {
+            return operant1 * operant2;
+        }
+
+        public double Devide(double operant1, double operant2)
+        {
+            try
+            {
+                return operant1 / operant2;
+            }
+            catch(DivideByZeroException)
+            {
+                Console.WriteLine("Dividing by zero");
+                throw new Exception("Dividing by zero");
+            }
+        }
+
+        public double Plus(double operant1, double operant2)
+        {
+            return operant1 + operant2;
+        }
+
+        public double Minus(double operant1, double operant2)
+        {
+            return operant1 - operant2;
+        }
     }
 }
