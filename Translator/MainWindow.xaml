@@ -49,6 +49,11 @@
         </Menu>
         
         <RichTextBox Name="codeTextBox" Grid.Row="1" >
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
         </RichTextBox>
 
         <GridSplitter Grid.Row="2"  ShowsPreview="False" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>

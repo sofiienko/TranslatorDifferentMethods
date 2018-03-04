@@ -15,9 +15,40 @@ namespace Translator
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    /// 
+   
     public partial class MainWindow : Window
     {
-        public MainWindow()
+
+        private void TextChangedEventHandler(object sender, TextChangedEventArgs e)
+        {
+            if (codeTextBox.Document == null)
+                return;
+
+            TextRange documentRange = new TextRange(codeTextBox.Document.ContentStart, codeTextBox.Document.ContentEnd);
+            documentRange.ClearAllProperties();
+
+
+
+            TextPointer navigator = codeTextBox.Document.ContentStart;
+
+            while (navigator.CompareTo(codeTextBox.Document.ContentEnd) < 0)
+            {
+
+                TextPointerContext context = navigator.GetPointerContext(LogicalDirection.Backward);
+
+                if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
+                {
+                    //CheckWordsInRun((Run)navigator.Parent);
+                }
+                navigator = navigator.GetNextContextPosition(LogicalDirection.Forward);
+
+            }
+
+        }
+
+
+            public MainWindow()
         {
             InitializeComponent();
             
