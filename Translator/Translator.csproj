@@ -62,18 +62,19 @@
     <Compile Include="Grammar.cs" />
     <Compile Include="Model\Alphabet.cs" />
     <Compile Include="Model\Constant.cs" />
+    <Compile Include="Model\Link.cs" />
     <Compile Include="Model\Identifier.cs" />
-    <Compile Include="Model\IdentifierObject.cs" />
     <Compile Include="Model\ISymbol.cs" />
     <Compile Include="Model\Lexem.cs" />
     <Compile Include="Model\LexicalUnit.cs" />
     <Compile Include="Model\NonTerminal.cs" />
-    <Compile Include="Model\Operator.cs" />
     <Compile Include="Model\SnapAbstract.cs" />
     <Compile Include="Model\Terminal.cs" />
+    <Compile Include="Processing\BuildRPNForAscendingAnalys.cs" />
+    <Compile Include="Processing\DijkstrasAlgorithm\DijkstrasBuildingRPNAlgorithm.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\CalculationRPN.cs" />
-    <Compile Include="SyntaxAnalyser\AscendingAnalysis\RPN.cs" />
-    <Compile Include="SyntaxAnalyser\AscendingAnalysis\SnapCalculationRPN.cs" />
+    <Compile Include="Processing\RPN.cs" />
+    <Compile Include="Processing\SnapCalculationRPN.cs" />
     <Compile Include="SyntaxAnalyser\RPNWindows.xaml.cs">
       <DependentUpon>RPNWindows.xaml</DependentUpon>
     </Compile>
@@ -162,6 +163,7 @@
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
+    <None Include="ClassDiagram3.cd" />
     <None Include="Model\ModelDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

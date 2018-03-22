@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Translator.Processing;
 
 namespace Translator.SyntaxAnalyser.AscendingAnalysis
 {
@@ -32,7 +33,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
         public List<Snap> snapList;
         private Snap currentSnap;
-        public RPN rpn = new RPN();
+        public BuildRPNForAA rpn = new BuildRPNForAA();
 
 
         RelationTable relationTableWindows;
@@ -68,7 +69,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             foreach (var item in listLexem)
             {
                 if (item is Model.Constant ) item.Substring = "const";
-                if (item is Model.Identifier) item.Substring = "id";
+                if (item is Model.Link) item.Substring = "id";
                 ListLexem.Add(item);
             }
 
@@ -98,7 +99,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             foreach (var item in listLexem)
             {
                 if (item is Model.Constant constant) constant.Substring = "const";
-                if (item is Model.Identifier idn) idn.Substring = "id";
+                if (item is Model.Link idn) idn.Substring = "id";
                 ListLexem.Add(item);
             }
 

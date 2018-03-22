@@ -13,7 +13,7 @@ namespace Translator
 
         public  AdapterFromOldToNewModel(List<Lexem> lexemList, List<Idnt> idntList, List<Const> constList)
         {
-            List<Model.IdentifierObject> idnObjList = new List<Model.IdentifierObject>();
+            List<Model.Identifier> idnObjList = new List<Model.Identifier>();
 
             uint index = 0;
             foreach(var idn in idntList)
@@ -22,7 +22,7 @@ namespace Translator
                 string name = idn.Name;
                 Model.TerminalCode terminalCode = ConvertFromStrinToTerminalCode(idn.Type);
 
-                idnObjList.Add(new Model.IdentifierObject(name, null, terminalCode, index++));
+                idnObjList.Add(new Model.Identifier(name, null, terminalCode, index++));
             }
                 
 
@@ -44,7 +44,7 @@ namespace Translator
                 {
                     string name = idntList[lexem.IndexIdnt.Value].Name;
 
-                    ModelLexemList.Add(new Model.Identifier(idnObjList[lexem.IndexIdnt.Value],(uint)i++,(uint)lexem.Row));
+                    ModelLexemList.Add(new Model.Link(idnObjList[lexem.IndexIdnt.Value],(uint)i++,(uint)lexem.Row));
                 }
                 else  ModelLexemList.Add(new Model.Lexem((uint)i++, (uint)lexem.Row, lexem.Substring, (Model.TerminalCode)lexem.Code));
 

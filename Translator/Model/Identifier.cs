@@ -6,57 +6,27 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-  public  class Identifier:Lexem
+ public   class Identifier
     {
-        private IdentifierObject idntObject;
+        public TerminalCode Type { get; private set; }
+        public double? Value { get; set; }
+        public string Name { get; private set; }
 
-        public uint NumberInIdentifierList { get; private set; }
-
-        public string Name
+        public uint Number { get; private set; }
+        public Identifier(string name, double? Value, TerminalCode type, uint number)
         {
-            get
-            {
-                return idntObject.Name;
-            }
+
+            if (!(type == TerminalCode.Float ||
+                  type == TerminalCode.Int ||
+                  type == (TerminalCode.Unsigned & TerminalCode.Float) ||
+                  type == (TerminalCode.Unsigned & TerminalCode.Int)
+                  )) throw new Exception("Invalid type. Type must be TerminalCode.Int, TerminalCode.Float,TerminalCode.Unsigned& TerminalCode.Int,TerminalCode.Unsigned & TerminalCode.Float");
+
+            this.Name = name;
+            this.Type = type;
+            this.Value = Value;
+            this.Number = number;
         }
 
-        public TerminalCode Type
-        {
-            get { return idntObject.Type; }
-        }
-
-        public double? Value
-        {
-            get
-            {
-                return idntObject.Value;
-            }
-            set
-            {
-                idntObject.Value = value;
-            }
-        } 
-
-        public Identifier(IdentifierObject identifierObject,uint number, uint row ):
-            base(number, row, "idn", identifierObject.Type)
-        {
-            this.idntObject = identifierObject;
-        }
-
-        //public Identifier(string name,double? Value, TerminalCode type, uint number, uint numberInIdentifierList, uint row) :
-        //    base(number, row, Value.ToString(), TerminalCode.Identifier)
-        //{
-
-        //    if (!(type == TerminalCode.Float ||
-        //          type == TerminalCode.Int ||
-        //          type == (TerminalCode.Unsigned & TerminalCode.Float) ||
-        //          type == (TerminalCode.Unsigned & TerminalCode.Int)
-        //          )) throw new Exception("Invalid type. Type must be TerminalCode.Int, TerminalCode.Float,TerminalCode.Unsigned& TerminalCode.Int,TerminalCode.Unsigned & TerminalCode.Float");
-
-        //    this.NumberInIdentifierList = numberInIdentifierList;
-        //    this.Name = name;
-        //    this.Type = type;
-        //    this.Value = Value;
-        //}
     }
 }

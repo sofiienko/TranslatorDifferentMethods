@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Translator.Model;
 
-namespace Translator.SyntaxAnalyser.AscendingAnalysis
+namespace Translator.Processing
 {
     /// <summary>
     /// Lexem For Expression template
@@ -28,7 +28,9 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         }
     }
 
-
+    /// <summary>
+    /// Element for BuildRPNForAscending Analys
+    /// </summary>
     class LFET
     {
         public string Substring { get; set; }
@@ -54,24 +56,32 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         }
     }
 
-    class Operator:IOperator
+   public class Operator:IRPNElement
     {
-        // uint Priority;
-        //uint AmountOperands
-       public string Sign { get; private set; }
+        uint? СomparativePriority;
+        uint? StackPriority;
+
+        public string Sign { get; private set; }
        public Operator(string sign)
         {
             this.Sign = sign;
         }
+        public Operator(string sign,uint priority)
+        {
+            this.Sign = sign;
+            this.СomparativePriority = priority;
+        }
 
-        //public static bool operator ==(Operator o1,Operator o2)
-        //{
-        //    if (o1.Sign == o2.Sign) return true;
-        //    else return false;
-        //}
+        public Operator(string sign, uint comparativePriority, uint stackPriority)
+        {
+            this.Sign = sign;
+            this.СomparativePriority = comparativePriority;
+            this.StackPriority = stackPriority;
+        }
+
         public override bool Equals(object obj)
         {
-           if(obj is Operator temp)return this.Sign == temp.Sign;
+            if (obj is Operator temp) return this.Sign == temp.Sign;
             return false;
         }
 
@@ -85,6 +95,12 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         //    if (o1.Sign == o2.Sign) return false;
         //    else return true;
         //}
+
+        //public static bool operator ==(Operator o1,Operator o2)
+        //{
+        //    if (o1.Sign == o2.Sign) return true;
+        //    else return false;
+        //}
     }
 
 
@@ -94,84 +110,21 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
     /// </summary>
     class RPN
     {
-        static Dictionary<LFET[], Operator> RPNdictionary { get; set; } = new Dictionary<LFET[], Operator>();
-        static public List<RPNSnap> AllRPN{ get; private set; } = new List<RPNSnap>();
-
-        /// <summary>
-        ///  Here should write rules for RPN
-        /// </summary>
-        static RPN()
-        {
-            RPNdictionary.Add(LFET.LexemBConstructor("id"), new Operator("idn"));
-            RPNdictionary.Add(LFET.LexemBConstructor("const"), new Operator("const"));
-            RPNdictionary.Add(LFET.LexemBConstructor("<term>", "*", "<multiple>"), new Operator("*"));
-            RPNdictionary.Add(LFET.LexemBConstructor("<term>", "/", "<multiple>"), new Operator("/"));
-            RPNdictionary.Add(LFET.LexemBConstructor("<expression>", "+", "<term1>"), new Operator("+"));
-            RPNdictionary.Add(LFET.LexemBConstructor("<expression>", "-", "<term1>"), new Operator("-"));
-            RPNdictionary.Add(LFET.LexemBConstructor("id", "=", "<expression1>"), new Operator(/*"end"*/"assign"));
-            RPNdictionary.Add(LFET.LexemBConstructor("<type>", "id", "=", "<expression1>"), new Operator(/*"end"*/"declare"));
-        }
-
-        public List<IOperator> Current { get; private set; } = new List<IOperator>();
-        
-
-        public void AddLexemsToCurrentRPN(Model.ISymbol[] inputLexemList)
-        {
-            Operator typeAction = GetActionValueByKey(inputLexemList);
-            if (typeAction == null) return; 
+       
+        static public List<RPNSnap> AllRPN{ get; protected set; } = new List<RPNSnap>();
 
 
-            else if ((typeAction.Sign == "assign")&&(inputLexemList[0] is Model.Identifier idnt))
-            {
-                double calcultaionResult = Calculation(Current);
-                idnt.Value = calcultaionResult;
-                AllRPN.Add(new  RPNSnap( CurrentRPNtoString(),calcultaionResult));
-                Current = new List<IOperator>();
-            }
 
-            else if ((typeAction.Sign == "declare")&&(inputLexemList[1] is Model.Identifier idn))
-            {
-                double calcultaionResult= Calculation(Current);
-                idn.Value = calcultaionResult;
-                AllRPN.Add(new RPNSnap( CurrentRPNtoString(), Calculation(Current)));
-                Current = new List<IOperator>();
-            }
-            else if (typeAction.Sign == "end")
-            {
-                //AllRPN.Add(CurrentRPNtoString(), calcultaionResult);
-                Current = new List<IOperator>();
-            }
-            else if (typeAction.Sign=="const" || typeAction.Sign =="idn") Current.Add((IOperator)inputLexemList[0]);
-            else Current.Add(typeAction);
-        }
+        public List<IRPNElement> Current { get; protected set; } = new List<IRPNElement>();
 
-         Operator GetActionValueByKey(Model.ISymbol[] mass)
-         {
-            foreach(var item in RPNdictionary)
-            {
-                if(mass.Length==item.Key.Length)
-                {
-                    bool flag = true;
-                    for (int i = 0; i < mass.Length; i++)
-                        if (mass[i].Substring != item.Key[i].Substring)
-                        {
-                            flag = false;
-                            break;
-                        }
-                    if (flag) return item.Value;
-                }
-            }
-            return null;
-         }
-
-        private double Calculation(List<IOperator> list)
+        protected double Calculation(List<IRPNElement> list)
         {
             
             Stack<double> stack = new Stack<double>();
             
             for(int i=0;i<list.Count; i++)
             {
-                if (list[i] is Model.Identifier id) stack.Push(id.Value.Value);
+                if (list[i] is Model.Link id) stack.Push(id.Value.Value);
                 if (list[i] is Model.Constant c) stack.Push(c.Value);
                 if (list[i] is Operator oprator)
                 {
@@ -198,7 +151,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             foreach (var item in Current)
             {
                 if (item is Operator _operator) sb.Append(_operator.Sign);
-                else if (item is Model.Identifier idn) sb.Append(idn.Name);
+                else if (item is Model.Link idn) sb.Append(idn.Name);
                 else if (item is Model.Constant cnst) sb.Append(cnst.Value.ToString());
 
                 else throw new Exception("Problem with converting IOperator to string");
@@ -210,12 +163,10 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             return sb.ToString();
          }
 
-
         public double Multiple(double operant1,double operant2)
         {
             return operant1 * operant2;
         }
-
         public double Devide(double operant1, double operant2)
         {
             try
@@ -228,12 +179,10 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 throw new Exception("Dividing by zero");
             }
         }
-
         public double Plus(double operant1, double operant2)
         {
             return operant1 + operant2;
         }
-
         public double Minus(double operant1, double operant2)
         {
             return operant1 - operant2;

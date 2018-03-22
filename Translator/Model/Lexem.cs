@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    interface IOperator { }
- public   class Lexem:Terminal,IOperator
-    {
-       public  uint Number { get; set; }
-       public uint Row { get; set; } 
+     interface IRPNElement { }
 
-        public Lexem(uint number, uint row,string substring, TerminalCode code)
-            : base(substring, code)
+
+     public   class Lexem:Terminal,IRPNElement
         {
-            this.Number = number;
-            this.Row = row;
+           public  uint Number { get; set; }
+           public uint Row { get; set; } 
+
+            public Lexem(uint number, uint row,string substring, TerminalCode code)
+                : base(substring, code)
+            {
+                this.Number = number;
+                this.Row = row;
+            }
         }
-    }
 }
