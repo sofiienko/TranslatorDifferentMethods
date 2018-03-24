@@ -75,6 +75,13 @@
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\CalculationRPN.cs" />
     <Compile Include="Processing\RPN.cs" />
     <Compile Include="Processing\SnapCalculationRPN.cs" />
+    <Compile Include="SyntaxAnalyser\PushdownAutomaton\IState.cs" />
+    <Compile Include="SyntaxAnalyser\PushdownAutomaton\Snap.cs" />
+    <Compile Include="SyntaxAnalyser\PushdownAutomaton\StackedAutomatic.cs" />
+    <Compile Include="SyntaxAnalyser\PushdownAutomaton\State.cs" />
+    <Compile Include="SyntaxAnalyser\PushdownAutomaton\StateS.cs" />
+    <Compile Include="SyntaxAnalyser\PushdownAutomaton\StateSyntaxis.cs" />
+    <Compile Include="SyntaxAnalyser\PushdownAutomaton\View.cs" />
     <Compile Include="SyntaxAnalyser\RPNWindows.xaml.cs">
       <DependentUpon>RPNWindows.xaml</DependentUpon>
     </Compile>
@@ -174,11 +181,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SyntaxAnalyser\PushdownAutomaton\" />
     <Folder Include="syntaxHighlighting\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="example.txt" />
+    <Resource Include="CodeExample.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
