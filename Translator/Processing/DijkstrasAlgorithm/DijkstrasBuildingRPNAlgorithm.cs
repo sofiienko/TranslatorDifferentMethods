@@ -7,9 +7,11 @@ using Translator.Model;
 
 namespace Translator.Processing
 {
-    class DijkstrasAlgorithm //: RPN
+
+    public delegate void WorkWithStack(Operator key = null);
+    public class DijkstrasAlgorithm //: RPN
     {
-        List<Operator> OperatorPriorityList = new List<Operator>
+        static List<Operator> OperatorPriorityList = new List<Operator>
          {
              new Operator("(",0),new Operator("[",0),
              new Operator(")",1),new Operator("]",1),
@@ -21,8 +23,16 @@ namespace Translator.Processing
              new Operator("+",7),new Operator("-",7),
              new Operator("*",7),new Operator("/",7),
          };
+        static Dictionary<Operator, WorkWithStack> OperatorDictionary = new Dictionary<Operator, WorkWithStack>();
 
-        Stack<IRPNElement> stack = new Stack<IRPNElement>();
+        static DijkstrasAlgorithm()
+        {
+            OperatorDictionary.Add(new Operator("(", 0),WorkWithStack()
+        }
+
+
+
+        Stack<Operator> stack = new Stack<Operator>();
         List<IRPNElement> outputList = new List<IRPNElement>();
 
         public DijkstrasAlgorithm(List<Model.Lexem> lexemList)
@@ -34,6 +44,16 @@ namespace Translator.Processing
             }
         }
 
+
+        private void WorkWithStackDefault(Operator _operator)
+        {
+            stack.Push(_operator);
+
+
+            if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
+                outputList.Add(stack.Pop());
+            stack.Push(_operator);
+        }
 
     }
 }

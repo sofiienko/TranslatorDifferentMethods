@@ -56,52 +56,7 @@ namespace Translator.Processing
         }
     }
 
-   public class Operator:IRPNElement
-    {
-        uint? СomparativePriority;
-        uint? StackPriority;
 
-        public string Sign { get; private set; }
-       public Operator(string sign)
-        {
-            this.Sign = sign;
-        }
-        public Operator(string sign,uint priority)
-        {
-            this.Sign = sign;
-            this.СomparativePriority = priority;
-        }
-
-        public Operator(string sign, uint comparativePriority, uint stackPriority)
-        {
-            this.Sign = sign;
-            this.СomparativePriority = comparativePriority;
-            this.StackPriority = stackPriority;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is Operator temp) return this.Sign == temp.Sign;
-            return false;
-        }
-
-        public override string ToString()
-        {
-            return Sign;
-        }
-
-        //public static bool operator !=(Operator o1, Operator o2)
-        //{
-        //    if (o1.Sign == o2.Sign) return false;
-        //    else return true;
-        //}
-
-        //public static bool operator ==(Operator o1,Operator o2)
-        //{
-        //    if (o1.Sign == o2.Sign) return true;
-        //    else return false;
-        //}
-    }
 
 
     /// <summary>

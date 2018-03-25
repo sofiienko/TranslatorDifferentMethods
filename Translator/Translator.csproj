@@ -68,6 +68,7 @@
     <Compile Include="Model\Lexem.cs" />
     <Compile Include="Model\LexicalUnit.cs" />
     <Compile Include="Model\NonTerminal.cs" />
+    <Compile Include="Model\Operator.cs" />
     <Compile Include="Model\SnapAbstract.cs" />
     <Compile Include="Model\Terminal.cs" />
     <Compile Include="Processing\BuildRPNForAscendingAnalys.cs" />
@@ -168,9 +169,6 @@
     <EmbeddedResource Include="SyntaxAnalyser\AscendingAnalysis\RelationTable.resx">
       <DependentUpon>RelationTable.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="ClassDiagram3.cd" />
     <None Include="Model\ModelDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
