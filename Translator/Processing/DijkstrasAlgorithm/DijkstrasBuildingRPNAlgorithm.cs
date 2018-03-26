@@ -11,23 +11,49 @@ namespace Translator.Processing
     public delegate void WorkWithStack(Operator key = null);
     public class DijkstrasAlgorithm //: RPN
     {
-        static List<Operator> OperatorPriorityList = new List<Operator>
-         {
-             new Operator("(",0),new Operator("[",0),
-             new Operator(")",1),new Operator("]",1),
-             new Operator("=",2,10),
-             new Operator("or",3),
-             new Operator("and",4),
-             new Operator("not",5),
-             //new Operator("<?>.....",6),
-             new Operator("+",7),new Operator("-",7),
-             new Operator("*",7),new Operator("/",7),
-         };
-        static Dictionary<Operator, WorkWithStack> OperatorDictionary = new Dictionary<Operator, WorkWithStack>();
+       OperatorRepository operatorRepo = new OperatorRepository();
 
-        static DijkstrasAlgorithm()
+
+        //static List<Operator> OperatorPriorityList = new List<Operator>
+        // {
+        //     new Operator("(",0),new Operator("[",0),
+        //     new Operator(")",1),new Operator("]",1),
+        //     new Operator("=",2,10),
+        //     new Operator("or",3),
+        //     new Operator("and",4),
+        //     new Operator("not",5),
+        //     //new Operator("<?>.....",6),
+        //     new Operator("+",7),new Operator("-",7),
+        //     new Operator("*",7),new Operator("/",7),
+        // };
+        Dictionary<Operator, WorkWithStack> OperatorDictionary = new Dictionary<Operator, WorkWithStack>();
+
+        public DijkstrasAlgorithm()
         {
-            OperatorDictionary.Add(new Operator("(", 0),WorkWithStack()
+            OperatorDictionary.Add(operatorRepo["("], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["["], WorkWithStackDefault);
+
+            OperatorDictionary.Add(operatorRepo["+"], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["-"], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["*"], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["/"], WorkWithStackDefault);
+
+            OperatorDictionary.Add(operatorRepo["or"], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["and"], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["not"], WorkWithStackDefault);
+
+            OperatorDictionary.Add(operatorRepo["<"], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo[">"], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["<="], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo[">="], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["=="], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["!="], WorkWithStackDefault);
+
+
+            OperatorDictionary.Add(operatorRepo[")"], ClosingBracket);
+            OperatorDictionary.Add(operatorRepo["]"], ClosingBracket);
+
+
         }
 
 
@@ -45,15 +71,27 @@ namespace Translator.Processing
         }
 
 
-        private void WorkWithStackDefault(Operator _operator)
+        private  void WorkWithStackDefault(Operator _operator)
         {
-            stack.Push(_operator);
-
-
             if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
                 outputList.Add(stack.Pop());
             stack.Push(_operator);
         }
+        private void ClosingBracket(Operator _operator)
+        {
+            //todo: I am not sure  here:(
+            if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
+                outputList.Add(stack.Pop());
+        }
 
+        private void DoNothing(Operator _operator) { }
+
+        private void OperatorIf(Operator _operator) { }
+        private void OperatorThen(Operator _operator) { }
+        private void OperatorFi(Operator _operator) { }
+
+
+        private void OperatorWhile(Operator _operator) { }
+        private void OperatorEndDo(Operator _operator) { }
     }
 }

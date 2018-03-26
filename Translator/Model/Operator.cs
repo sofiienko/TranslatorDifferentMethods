@@ -89,7 +89,7 @@ namespace Translator.Model
                 new Operator("<",4),
                 new Operator(">",4),
                 new Operator("<=",4),
-                new Operator("<=",4),
+                new Operator(">=",4),
                 new Operator("==",4),
                 new Operator("!=",4),
 
