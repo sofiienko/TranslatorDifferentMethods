@@ -12,7 +12,7 @@ namespace Translator.StackedAutomatic
     class StackedAutomatic
     {
         public  List<Snap> listSnaps = new List<Snap>();
-        List<translator.Lexem> lexemList;
+        List<Translator.Lexem> lexemList;
         State main;
         IState[] logicalExpression;
         IState[] @operator;
@@ -20,7 +20,7 @@ namespace Translator.StackedAutomatic
         IState[] expression;
         bool isCodeGood = true;
 
-        public StackedAutomatic(List<translator.Lexem> lexemList)
+        public StackedAutomatic(List<Translator.Lexem> lexemList)
         {
             this.lexemList = lexemList;
         }

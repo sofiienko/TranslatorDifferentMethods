@@ -38,7 +38,7 @@ namespace Translator.StackedAutomatic
 
         bool isEnd = false;
         
-        public static List<translator.Lexem> Lexemlist { get; set; }
+        public static List<Translator.Lexem> Lexemlist { get; set; }
         public static int counterLexem;
         public static Stack<State> Stack { get; set; }
         public static List<Snap> SnapList { get; set; }
@@ -81,7 +81,7 @@ namespace Translator.StackedAutomatic
         public void Execute()
         {
             if (Lexemlist == null) throw new Exception("Oops, lexem list are empty:(");
-            translator.Lexem temp = Lexemlist[++counterLexem];
+            Translator.Lexem temp = Lexemlist[++counterLexem];
             SnapList.Add(new Snap(temp.Substring, Number, Stack.ToList()));
             Console.WriteLine("#"+Number);
             try

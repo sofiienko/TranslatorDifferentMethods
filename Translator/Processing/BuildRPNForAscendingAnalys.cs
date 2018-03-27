@@ -59,7 +59,6 @@ namespace Translator.Processing
             else Current.Add(typeAction);
         }
 
-
         Operator GetOperatorByKey(Model.ISymbol[] mass)
         {
             foreach (var item in RPNdictionary)

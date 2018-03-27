@@ -62,6 +62,7 @@
     <Compile Include="Grammar.cs" />
     <Compile Include="Model\Alphabet.cs" />
     <Compile Include="Model\Constant.cs" />
+    <Compile Include="Model\Label.cs" />
     <Compile Include="Model\Link.cs" />
     <Compile Include="Model\Identifier.cs" />
     <Compile Include="Model\ISymbol.cs" />
@@ -69,10 +70,12 @@
     <Compile Include="Model\LexicalUnit.cs" />
     <Compile Include="Model\NonTerminal.cs" />
     <Compile Include="Model\Operator.cs" />
+    <Compile Include="Model\OperatorComponent.cs" />
     <Compile Include="Model\SnapAbstract.cs" />
     <Compile Include="Model\Terminal.cs" />
     <Compile Include="Processing\BuildRPNForAscendingAnalys.cs" />
     <Compile Include="Processing\DijkstrasAlgorithm\DijkstrasBuildingRPNAlgorithm.cs" />
+    <Compile Include="Processing\DijkstrasAlgorithm\LabelControler.cs" />
     <Compile Include="SyntaxAnalyser\AscendingAnalysis\CalculationRPN.cs" />
     <Compile Include="Processing\RPN.cs" />
     <Compile Include="Processing\SnapCalculationRPN.cs" />

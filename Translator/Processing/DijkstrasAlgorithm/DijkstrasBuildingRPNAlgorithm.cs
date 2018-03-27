@@ -49,10 +49,16 @@ namespace Translator.Processing
             OperatorDictionary.Add(operatorRepo["=="], WorkWithStackDefault);
             OperatorDictionary.Add(operatorRepo["!="], WorkWithStackDefault);
 
-
             OperatorDictionary.Add(operatorRepo[")"], ClosingBracket);
             OperatorDictionary.Add(operatorRepo["]"], ClosingBracket);
 
+            OperatorDictionary.Add(operatorRepo["do"], DoNothing);
+            OperatorDictionary.Add(operatorRepo["while"], OperatorWhile);
+            OperatorDictionary.Add(operatorRepo["enddo"], OperatorEndDo);
+
+            OperatorDictionary.Add(operatorRepo["if"], OperatorIf);
+            OperatorDictionary.Add(operatorRepo["then"], OperatorThen);
+            OperatorDictionary.Add(operatorRepo["fi"], OperatorFi);
 
         }
 
@@ -91,7 +97,35 @@ namespace Translator.Processing
         private void OperatorFi(Operator _operator) { }
 
 
-        private void OperatorWhile(Operator _operator) { }
+        private void OperatorWhile(Operator _operator)
+        {
+
+
+
+        }
         private void OperatorEndDo(Operator _operator) { }
     }
+
+    /// <summary>
+    /// conditional transition by mistake
+    /// </summary>
+    public class CTM: IRPNElement
+    {
+        public override string ToString()
+        {
+            return "CTM";
+        }
+    }
+    /// <summary>
+    /// unconditional transition
+    /// </summary>
+    public class UT : IRPNElement
+    {
+        public override string ToString()
+        {
+            return "UT";
+        }
+        
+    }
+
 }
