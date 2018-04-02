@@ -19,7 +19,9 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
                 if (showRelationTable == true) PrepareRelationMatrix();
             }
         }
-        private bool showParsingTable = true;
+
+        public bool showParsingTable = false;
+
         public bool ShowParsingTable
         {
             get { return showParsingTable; }
@@ -39,6 +41,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
         RelationTable relationTableWindows;
         RealtionMatrix relationMatrix;
 
+        public bool showCalculationResult=true;
+
         //ParsingTableWindows parsingTable;
 
         private bool PrepareRelationMatrix()
@@ -56,15 +60,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
         public bool CheckSyntax(List<Model.Lexem> listLexem)
         {
-            //ListLexem = listLexem.Cast<ISymbol>().ToList() ;
             snapList = new List<Snap>();
-
-            //ListLexem = (from lexem in listLexem
-            //             select
-            //             (lexem.Code == 38) ? new LexemB { Substring = "const" } :  ///????
-            //             (lexem.Code == 34) ? new LexemB { Substring = "id" } :
-            //              new LexemB { Substring = lexem.Substring }).ToList<LexemB>();
-
 
             foreach (var item in listLexem)
             {
@@ -80,21 +76,14 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             if (showParsingTable) new ParsingTableWindows(snapList).Show();
 
 
-            new ParsingTableWindows(RPN.AllRPN).Show();
+            if(showCalculationResult) new ParsingTableWindows(RPN.AllRPN).Show();
 
             return true;
         }
         public bool CheckSyntax(List<Model.ISymbol> listLexem)
         {
-            //ListLexem = listLexem.Cast<ISymbol>().ToList() ;
+
             snapList = new List<Snap>();
-
-            //ListLexem = (from lexem in listLexem
-            //             select
-            //             (lexem.Code == 38) ? new LexemB { Substring = "const" } :  ///????
-            //             (lexem.Code == 34) ? new LexemB { Substring = "id" } :
-            //              new LexemB { Substring = lexem.Substring }).ToList<LexemB>();
-
 
             foreach (var item in listLexem)
             {

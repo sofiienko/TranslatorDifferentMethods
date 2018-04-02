@@ -47,55 +47,59 @@ namespace Translator.Model
         {
             this.position = position;
         }
+
+        public Label SetPostion(int position)
+        {
+            this.position = position;
+            return this;
+        }
     }
 
 
 
-    //public class LabelControler
-    //{
+    public class LabelControler
+    {
 
-    //    private int cursor = -1;
+        private int cursor = -1;
 
-    //    List<List<ILabel>> arrayLabels = new List<List<ILabel>>();
-
-
-    //    public LabelControler()
-    //    {
-    //        arrayLabels[0] = new List<ILabel>();
-    //    }
-
-    //    public Label GetNewLabel(int position,int n=0)
-    //    {
-    //        var label = new Label(position, arrayLabels.Count);
+        List<ILabel> arrayLabels = new List<ILabel>();
 
 
-    //        if(n==0)
-    //        arrayLabels[0].Add(label);
+        public LabelControler()
+        {
+            arrayLabels = new List<ILabel>();
+        }
 
-    //        cursor++;
+        public Label NewLabel(int position)
+        {
+            var label = new Label(position, arrayLabels.Count);
 
-    //        return label;
-    //    }
+            arrayLabels.Add(label);
 
-    //    public LabelLink NewLabelLink(int n=0)
-    //    {
-    //        var label = new Label(null, arrayLabels.Count);
-    //        arrayLabels[n].Add(label);
+            cursor++;
 
-    //        cursor++;
+            return label;
+        }
 
-    //        return label;
-    //    }
+        public LabelLink NewLabelLink()
+        {
+            var label = new Label(null, arrayLabels.Count);
+            arrayLabels.Add(label);
 
-    //    public Label GetLabel()
-    //    {
-    //        return arrayLabels[0][cursor--] as Label;
-    //    }
+            cursor++;
 
-    //    public LabelLink GetLabelLink()
-    //    {
-    //        return arrayLabels[0][cursor--] as LabelLink;
-    //    }
+            return label;
+        }
 
-    //}
+        public Label GetLabel()
+        {
+            return arrayLabels[cursor--] as Label;
+        }
+
+        public LabelLink GetLabelLink()
+        {
+            return arrayLabels[cursor--] as LabelLink;
+        }
+
+    }
 }

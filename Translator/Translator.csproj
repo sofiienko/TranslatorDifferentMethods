@@ -74,9 +74,9 @@
     <Compile Include="Model\SnapAbstract.cs" />
     <Compile Include="Model\Terminal.cs" />
     <Compile Include="Processing\BuildRPNForAscendingAnalys.cs" />
-    <Compile Include="Processing\DijkstrasAlgorithm\DijkstrasBuildingRPNAlgorithm.cs" />
-    <Compile Include="Processing\DijkstrasAlgorithm\LabelControler.cs" />
-    <Compile Include="SyntaxAnalyser\AscendingAnalysis\CalculationRPN.cs" />
+    <Compile Include="Processing\DijkstrasAlgorithmFolder\DijkstrasAlgorithm.cs" />
+    <Compile Include="Processing\DijkstrasAlgorithmFolder\DijkstrasBuildingRPNAlgorithm.cs" />
+    <Compile Include="Processing\DijkstrasAlgorithmFolder\LabelControler.cs" />
     <Compile Include="Processing\RPN.cs" />
     <Compile Include="Processing\SnapCalculationRPN.cs" />
     <Compile Include="SyntaxAnalyser\PushdownAutomaton\IState.cs" />
@@ -113,6 +113,9 @@
     <Compile Include="SyntaxAnalyser\RecursiveDescentParser\RecursiveDescent.cs" />
     <Compile Include="SyntaxAnalyser\RecursiveDescentParser\SyntaxExeption.cs" />
     <Compile Include="SyntaxAnalyser\RecursiveDescentParser\Unit.cs" />
+    <Compile Include="UniversalTableWindwos.xaml.cs">
+      <DependentUpon>UniversalTableWindwos.xaml</DependentUpon>
+    </Compile>
     <Page Include="LexicalAnalyser\LexemTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -147,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SyntaxAnalyser\RPNWindows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UniversalTableWindwos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

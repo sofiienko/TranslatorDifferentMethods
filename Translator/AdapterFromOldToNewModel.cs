@@ -25,10 +25,6 @@ namespace Translator
                 idnObjList.Add(new Model.Identifier(name, null, terminalCode, index++));
             }
                 
-
-
-
-
             int i = 0;
             foreach (var lexem in lexemList)
             {

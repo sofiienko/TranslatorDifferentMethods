@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Translator.Model
 {
-    public class Operator : IRPNElement
+   public interface IOperator
+    {
+        uint? СomparativePriority { get; }
+    }
+
+    public class Operator : IRPNElement, IOperator
     {
         public uint? СomparativePriority { get; private set; }
         public uint? StackPriority { get; private set; }

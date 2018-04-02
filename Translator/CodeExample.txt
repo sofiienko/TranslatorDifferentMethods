@@ -21,3 +21,10 @@ float startValue = 3*(5-2+1)-4
 float buffer = startValue*3-2
 startValue = buffer+1000
 end
+
+program
+begin
+if (4>9)then
+float i=0
+fi
+end

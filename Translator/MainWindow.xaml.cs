@@ -7,8 +7,10 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Translator.LexicalAnalyser;
 using Translator.LexicalAnalyser.FiniteStateMachine;
+using Translator.Processing.DijkstrasAlgorithmFolder;
 using Translator.SyntaxAnalyser;
 using Translator.SyntaxAnalyser.AscendingAnalysis;
+using Translator.SyntaxAnalyser.RecursiveDescentParser;
 
 namespace Translator
 {
@@ -48,7 +50,7 @@ namespace Translator
         }
 
 
-            public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
             
@@ -89,12 +91,19 @@ namespace Translator
 
 
             ISyntaxAnalyser syntaxAnalyser = new AscendingAnalys();
+            ISyntaxAnalyser syntaxAnalyser2 = new RecursiveDescent();
             AdapterFromOldToNewModel adapter = new AdapterFromOldToNewModel(analyser.LexemList,analyser.IdentifierList, analyser.ConstantList );
 
 
             //try
             //{
-                syntaxAnalyser.CheckSyntax(adapter.ModelLexemList);
+
+            syntaxAnalyser2.CheckSyntax(adapter.ModelLexemList);
+            DijkstrasAlgorithm dijkstra = new DijkstrasAlgorithm();
+            dijkstra.BuildRPN(adapter.ModelLexemList);
+               // syntaxAnalyser.CheckSyntax(adapter.ModelLexemList);
+
+
             //}
             //catch (Exception ex)
             //{
