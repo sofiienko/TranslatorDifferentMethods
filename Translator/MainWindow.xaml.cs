@@ -116,6 +116,7 @@ namespace Translator
 
         }
 
+
         private void Open_Click(object sender, RoutedEventArgs e)
         {
 
