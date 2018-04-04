@@ -15,6 +15,14 @@ namespace Translator.Model
             Components = mass.ToList();
         }
 
+        public IRPNElement this[int number]
+        {
+            get
+            {
+                return Components[number]??null;
+            }
+        }
+
         public int? СomparativePriority
         {
             get

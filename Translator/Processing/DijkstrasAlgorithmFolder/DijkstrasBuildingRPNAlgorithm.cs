@@ -13,7 +13,7 @@ namespace Translator.Processing
     {
         public override string ToString()
         {
-            return "CTM";
+            return " CTbM ";
         }
     }
     /// <summary>

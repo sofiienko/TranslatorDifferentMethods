@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 namespace Translator.Model
 { 
     /// 
-    public interface ILabel { }
+    public interface ILabel
+    {
+         int? Position{get;}
+         int NumberLabel { get;}
+    }
 
     /// <summary>
     /// link on place in code where should move
@@ -72,19 +76,19 @@ namespace Translator.Model
 
         private int cursor = -1;
 
-        List<ILabel> arrayLabels = new List<ILabel>();
+        public List<ILabel> ArrayLabels { get; private set; } = new List<ILabel>();
 
 
         public LabelControler()
         {
-            arrayLabels = new List<ILabel>();
+            ArrayLabels = new List<ILabel>();
         }
 
         public Label NewLabel(int position)
         {
-            var label = new Label(position, arrayLabels.Count);
+            var label = new Label(position, ArrayLabels.Count);
 
-            arrayLabels.Add(label);
+            ArrayLabels.Add(label);
 
             cursor++;
 
@@ -93,8 +97,8 @@ namespace Translator.Model
 
         public LabelLink NewLabelLink()
         {
-            var label = new Label(null, arrayLabels.Count);
-            arrayLabels.Add(label);
+            var label = new Label(null, ArrayLabels.Count);
+            ArrayLabels.Add(label);
 
             cursor++;
 
@@ -103,12 +107,12 @@ namespace Translator.Model
 
         public Label GetLabel()
         {
-            return arrayLabels[cursor--] as Label;
+            return ArrayLabels[cursor--] as Label;
         }
 
         public LabelLink GetLabelLink()
         {
-            return arrayLabels[cursor--] as LabelLink;
+            return ArrayLabels[cursor--] as LabelLink;
         }
 
     }

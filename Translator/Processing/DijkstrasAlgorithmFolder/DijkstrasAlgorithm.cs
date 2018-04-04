@@ -10,10 +10,9 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
 {
     public class DijkstrasAlgorithm //: RPN
     {
-        UniversalTableWindwos widows = new UniversalTableWindwos();
+        UniversalTableWindwos widowsDijkstrasAlgorithmSnap = new UniversalTableWindwos();
+        UniversalTableWindwos widowslabelTable = new UniversalTableWindwos();
         List<DijkstrasAlgorithmSnap> snapList = new List<DijkstrasAlgorithmSnap>();
-
-
 
         OperatorRepository operatorRepo = new OperatorRepository();
         LabelControler labelControler = new LabelControler();
@@ -56,13 +55,16 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             OperatorDictionary.Add(operatorRepo[")"], ClosingBracket);
             OperatorDictionary.Add(operatorRepo["]"], ClosingBracket);
 
-            OperatorDictionary.Add(operatorRepo["do"], DoNothing);
+            //OperatorDictionary.Add(operatorRepo["do"], DoNothing);
             OperatorDictionary.Add(operatorRepo["while"], OperatorWhile);
             OperatorDictionary.Add(operatorRepo["enddo"], OperatorEndDo);
 
             OperatorDictionary.Add(operatorRepo["if"], OperatorIf);
             OperatorDictionary.Add(operatorRepo["then"], OperatorThen);
             OperatorDictionary.Add(operatorRepo["fi"], OperatorFi);
+
+
+            OperatorDictionary.Add(operatorRepo["¶"], WorkWithStackDefaultWithoutInsert);
 
         }
 
@@ -85,8 +87,12 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
                 snapList.Add(new DijkstrasAlgorithmSnap(inputListLexems.Skip(i+1).ToList(), stack, outputList));
             }
 
-            widows.Table = snapList;
-            widows.Show();
+            widowsDijkstrasAlgorithmSnap.Table = snapList;
+            widowsDijkstrasAlgorithmSnap.Show();
+
+            widowslabelTable.Table = labelControler.ArrayLabels;
+            widowslabelTable.Show();
+
         }
 
 
@@ -110,6 +116,27 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
                 stack.Push(_operator);
             }
         }
+
+        /// <summary>
+        /// WorkWithStackDefaultWithoutInserting in outputList
+        /// </summary>
+        /// <param name="_operator"></param>
+        private void WorkWithStackDefaultWithoutInsert(Operator _operator)
+        {
+            if (stack.Count > 0)
+            {
+                if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
+                {
+                    outputList.Add((IRPNElement)stack.Pop());
+                }
+            }
+          
+        }
+
+        /// <summary>
+        /// ) or ]
+        /// </summary>
+        /// <param name="_operator"></param>
         private void ClosingBracket(Operator _operator)
         {
             //todo: I am not sure  here:(
@@ -151,20 +178,34 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         private int labelCounter = 0;
         private void OperatorWhile(Operator _operator)
         {
-            outputList.Add(labelControler.NewLabel(outputList.Count));
+            var label1 = labelControler.NewLabel(outputList.Count);
+            outputList.Add(label1);
 
             outputList.Add(new CTbM()); // conditional transition by mistake
 
-            outputList.Add(labelControler.NewLabelLink());
+            var label2 = labelControler.NewLabelLink();
+            outputList.Add(label2);
 
 
-            stack.Push(operatorRepo["while"]);
+            stack.Push(new OperatorComponent(operatorRepo["while"],label1,label2));
 
         }
         private void OperatorEndDo(Operator _operator)
         {
+            while (!(stack.Peek() is OperatorComponent))
+                outputList.Add((IRPNElement)stack.Pop());
 
 
+            OperatorComponent fromStack = stack.Pop() as OperatorComponent;
+
+            if(fromStack==null)
+            {
+                throw new Exception("oops, unexpected problem");
+            }
+
+            outputList.Add(((Label)fromStack[1]).SetPostion(outputList.Count+1));
+            outputList.Add(new UT());
+            outputList.Add(((Label)fromStack[2]).SetPostion(outputList.Count + 1));
         }
     }
 

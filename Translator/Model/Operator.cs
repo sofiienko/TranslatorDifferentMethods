@@ -75,7 +75,7 @@ namespace Translator.Model
             items = new List<Operator>
             {
                 new Operator("if",-1),
-                new Operator("do",-1),
+                new Operator("while",-1),
                 new Operator("(",0),
                 new Operator("[",0),
                 //new Operator("if",0),
@@ -83,6 +83,9 @@ namespace Translator.Model
 
                 new Operator(")",1),
                 new Operator("]",1),
+
+                new Operator("¶",1),
+
                 new Operator("or",1),
                 new Operator("then",1),
                  new Operator("while",1),
