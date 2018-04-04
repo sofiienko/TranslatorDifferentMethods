@@ -20,7 +20,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             }
         }
 
-        public bool showParsingTable = false;
+        public bool showParsingTable = true;
 
         public bool ShowParsingTable
         {

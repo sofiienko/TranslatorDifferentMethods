@@ -27,6 +27,10 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
 
         Dictionary<Operator, WorkWithStack> OperatorDictionary = new Dictionary<Operator, WorkWithStack>();
 
+
+        /// <summary>
+        /// Initialization OperatorDictionary
+        /// </summary>
         public DijkstrasAlgorithm()
         {
             OperatorDictionary.Add(operatorRepo["("], WorkWithStackDefault);
@@ -47,6 +51,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             OperatorDictionary.Add(operatorRepo[">="], WorkWithStackDefault);
             OperatorDictionary.Add(operatorRepo["=="], WorkWithStackDefault);
             OperatorDictionary.Add(operatorRepo["!="], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["="], WorkWithStackDefault);
 
             OperatorDictionary.Add(operatorRepo[")"], ClosingBracket);
             OperatorDictionary.Add(operatorRepo["]"], ClosingBracket);
@@ -65,25 +70,23 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         {
 
             this.inputListLexems = lexemList.Cast<IRPNElement>().ToList();
-            foreach (var item in inputListLexems)
+            for (int i=0;i<inputListLexems.Count;i++) 
             {
-                if (item is Constant || item is Link) outputList.Add(item);
+
+                var temp = inputListLexems[i];
+                if (inputListLexems[i] is Constant || inputListLexems[i] is Link) outputList.Add(inputListLexems[i]);
                 else
                 {
-                    var _operator = operatorRepo[(item as Model.Lexem).Substring];
+                    var _operator = operatorRepo[(inputListLexems[i] as Model.Lexem).Substring];
                     if (_operator == null) continue;
 
                     OperatorDictionary[_operator](_operator);
-
-                    snapList.Add(new DijkstrasAlgorithmSnap(item, stack, outputList.LastOrDefault()));
-
                 }
-
-                widows.Table = snapList;
-                widows.Show();
+                snapList.Add(new DijkstrasAlgorithmSnap(inputListLexems.Skip(i+1).ToList(), stack, outputList));
             }
 
-
+            widows.Table = snapList;
+            widows.Show();
         }
 
 
@@ -110,8 +113,12 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         private void ClosingBracket(Operator _operator)
         {
             //todo: I am not sure  here:(
-            if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
+            //if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
+            //    outputList.Add((IRPNElement)stack.Pop());
+
+            while(stack.Peek()!= operatorRepo["("] && stack.Peek() != operatorRepo["["])
                 outputList.Add((IRPNElement)stack.Pop());
+            stack.Pop();
         }
 
         private void DoNothing(Operator _operator) { }
@@ -120,7 +127,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         {
             var label = labelControler.NewLabelLink();
             outputList.Add(label);
-            outputList.Add(new CTM()); // conditional transition by mistake
+            outputList.Add(new CTbM()); // conditional transition by mistake
 
             stack.Push(new OperatorComponent(operatorRepo["if"], label));
         }
@@ -131,10 +138,12 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         }
         private void OperatorFi(Operator _operator)
         {
-            while (stack.Peek() is OperatorComponent)
+            while (!(stack.Peek() is OperatorComponent))
                 outputList.Add((IRPNElement)stack.Pop());
 
-            outputList.Add(((Label)((stack.Pop() as OperatorComponent).Components.LastOrDefault())).SetPostion(outputList.Count));
+            outputList.Add(((Label)((stack.Pop() as OperatorComponent)
+                .Components.LastOrDefault()))
+                .SetPostion(outputList.Count));
                
         }
 
@@ -144,7 +153,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         {
             outputList.Add(labelControler.NewLabel(outputList.Count));
 
-            outputList.Add(new CTM()); // conditional transition by mistake
+            outputList.Add(new CTbM()); // conditional transition by mistake
 
             outputList.Add(labelControler.NewLabelLink());
 
@@ -166,18 +175,45 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         public string Output { get; set; }
 
 
-       public DijkstrasAlgorithmSnap(IRPNElement input, Stack<IOperator>  stack,IRPNElement output)
+       public DijkstrasAlgorithmSnap(List<IRPNElement> input, Stack<IOperator>  stack,List<IRPNElement> output)
         {
             StringBuilder s = new StringBuilder();
+            foreach (var item in input)
+                s.Append(item);
+            this.Input = s.ToString();
+
+            s = new StringBuilder();
             foreach (var item in stack)
                 s.Append(item);
-
             this.Stack = s.ToString();
-            this.Input = input.ToString();
-            this.Output = output.ToString();
 
+
+            s = new StringBuilder();
+            foreach (var item in output)
+                s.Append(item);
+            this.Output = s.ToString();
         }
 
+    }
+
+    public static class ExtenisonForList
+    {
+        public static void Push<T>(this List<T> list, T element)
+        {
+            list.Insert(0, element);
+        }
+
+        public static T Pop<T>(this List<T> list)
+        {
+            T element = list[0];
+            list.RemoveAt(0);
+            return element;
+        }
+        public static T Peek<T>(this List<T> list)
+        {
+            T element = list[0];
+            return element;
+        }
     }
 
 }

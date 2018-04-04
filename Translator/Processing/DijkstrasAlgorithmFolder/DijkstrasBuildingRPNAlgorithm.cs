@@ -9,7 +9,7 @@ namespace Translator.Processing
     /// <summary>
     /// conditional transition by mistake
     /// </summary>
-    public class CTM: IRPNElement
+    public class CTbM: IRPNElement
     {
         public override string ToString()
         {

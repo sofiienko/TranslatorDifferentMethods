@@ -179,6 +179,7 @@
     <EmbeddedResource Include="SyntaxAnalyser\AscendingAnalysis\RelationTable.resx">
       <DependentUpon>RelationTable.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Model\ModelDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

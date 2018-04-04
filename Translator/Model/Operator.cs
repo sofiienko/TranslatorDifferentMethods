@@ -8,26 +8,26 @@ namespace Translator.Model
 {
    public interface IOperator
     {
-        uint? СomparativePriority { get; }
+        int? СomparativePriority { get; }
     }
 
     public class Operator : IRPNElement, IOperator
     {
-        public uint? СomparativePriority { get; private set; }
-        public uint? StackPriority { get; private set; }
+        public int? СomparativePriority { get; private set; }
+        public int? StackPriority { get; private set; }
 
         public string Sign { get; private set; }
         public Operator(string sign)
         {
             this.Sign = sign;
         }
-        public Operator(string sign, uint priority)
+        public Operator(string sign, int priority)
         {
             this.Sign = sign;
             this.СomparativePriority = priority;
         }
 
-        public Operator(string sign, uint comparativePriority, uint stackPriority)
+        public Operator(string sign, int comparativePriority, int stackPriority)
         {
             this.Sign = sign;
             this.СomparativePriority = comparativePriority;
@@ -74,13 +74,13 @@ namespace Translator.Model
         {
             items = new List<Operator>
             {
+                new Operator("if",-1),
+                new Operator("do",-1),
                 new Operator("(",0),
                 new Operator("[",0),
-                new Operator("if",0),
-                new Operator("do",0),
+                //new Operator("if",0),
+                //new Operator("do",0),
 
-
-               
                 new Operator(")",1),
                 new Operator("]",1),
                 new Operator("or",1),
@@ -90,6 +90,8 @@ namespace Translator.Model
                 new Operator("and",2),
 
                 new Operator("not",3),
+
+                new Operator("=",3),
 
                 new Operator("<",4),
                 new Operator(">",4),
@@ -107,7 +109,6 @@ namespace Translator.Model
 
                 new Operator("fi"),
                 new Operator("enddo")
-
             };
         }
 

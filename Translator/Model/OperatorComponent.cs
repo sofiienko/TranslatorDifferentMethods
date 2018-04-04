@@ -15,7 +15,9 @@ namespace Translator.Model
             Components = mass.ToList();
         }
 
-        public  uint? СomparativePriority { get
+        public int? СomparativePriority
+        {
+            get
             {
                 try
                 {
@@ -27,6 +29,15 @@ namespace Translator.Model
 
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in Components)
+                sb.Append(item);
+
+            return sb.ToString();
         }
     }
 }

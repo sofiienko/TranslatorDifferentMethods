@@ -27,6 +27,11 @@ namespace Translator.Model
         {
             NumberLabel = numberLabel;
         }
+
+        public override string ToString()
+        {
+            return "L" + NumberLabel;
+        }
     }
 
     
@@ -52,6 +57,11 @@ namespace Translator.Model
         {
             this.position = position;
             return this;
+        }
+
+        public override string ToString()
+        {
+            return "L" + NumberLabel+":";
         }
     }
 

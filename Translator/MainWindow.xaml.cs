@@ -17,10 +17,9 @@ namespace Translator
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    /// 
-   
     public partial class MainWindow : Window
     {
+
 
         private void TextChangedEventHandler(object sender, TextChangedEventArgs e)
         {
@@ -48,6 +47,7 @@ namespace Translator
             }
 
         }
+
 
 
         public MainWindow()
@@ -98,10 +98,10 @@ namespace Translator
             //try
             //{
 
-            syntaxAnalyser2.CheckSyntax(adapter.ModelLexemList);
-            DijkstrasAlgorithm dijkstra = new DijkstrasAlgorithm();
-            dijkstra.BuildRPN(adapter.ModelLexemList);
-               // syntaxAnalyser.CheckSyntax(adapter.ModelLexemList);
+           // syntaxAnalyser2.CheckSyntax(adapter.ModelLexemList);
+             DijkstrasAlgorithm dijkstra = new DijkstrasAlgorithm();
+             dijkstra.BuildRPN(adapter.ModelLexemList);
+                //syntaxAnalyser.CheckSyntax(adapter.ModelLexemList);
 
 
             //}
