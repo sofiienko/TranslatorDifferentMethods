@@ -16,6 +16,8 @@ namespace Translator.Processing
             return " CTbM ";
         }
     }
+
+
     /// <summary>
     /// unconditional transition
     /// </summary>
@@ -26,6 +28,31 @@ namespace Translator.Processing
             return "UT";
         }
         
+    }
+
+    /// <summary>
+    /// write on screen
+    /// </summary>
+    public class WT : IRPNElement
+    {
+        public override string ToString()
+        {
+            return "WT";
+        }
+
+    }
+
+
+    /// <summary>
+    /// Read from console
+    /// </summary>
+    public class RD : IRPNElement
+    {
+        public override string ToString()
+        {
+            return "RD";
+        }
+
     }
 
 }

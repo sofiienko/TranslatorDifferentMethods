@@ -59,13 +59,17 @@ namespace Translator.Model
 
         public Label SetPostion(int position)
         {
+            if(this.position!=null)
+            {
+                throw new Exception("Position is setted now");
+            }
             this.position = position;
             return this;
         }
 
         public override string ToString()
         {
-            return "L" + NumberLabel+":";
+            return "L" + NumberLabel;
         }
     }
 

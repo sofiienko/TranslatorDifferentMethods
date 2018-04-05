@@ -17,7 +17,8 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         OperatorRepository operatorRepo = new OperatorRepository();
         LabelControler labelControler = new LabelControler();
 
-        List<IRPNElement> inputListLexems;
+        //   List<IRPNElement> inputListLexems;
+        List<Model.Lexem> inputListLexems;
 
         int currentPosInListLexems = 0;
 
@@ -71,20 +72,30 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         public void BuildRPN(List<Model.Lexem> lexemList)
         {
 
-            this.inputListLexems = lexemList.Cast<IRPNElement>().ToList();
+            this.inputListLexems = lexemList;//.Cast<IRPNElement>().ToList();
+
             for (int i=0;i<inputListLexems.Count;i++) 
             {
 
-                var temp = inputListLexems[i];
-                if (inputListLexems[i] is Constant || inputListLexems[i] is Link) outputList.Add(inputListLexems[i]);
+                var temp = inputListLexems[i];// this row only for debug
+
+                if (inputListLexems[i] is Constant || inputListLexems[i] is Link)
+                {
+                    outputList.Add(inputListLexems[i]);
+                }
                 else
                 {
-                    var _operator = operatorRepo[(inputListLexems[i] as Model.Lexem).Substring];
+                    //var _operator = operatorRepo[(inputListLexems[i] as Model.Lexem).Substring];
+                    var _operator = operatorRepo[inputListLexems[i].Substring];
+
                     if (_operator == null) continue;
 
                     OperatorDictionary[_operator](_operator);
                 }
-                snapList.Add(new DijkstrasAlgorithmSnap(inputListLexems.Skip(i+1).ToList(), stack, outputList));
+                snapList.Add(new DijkstrasAlgorithmSnap(
+                    inputListLexems.Skip(i+1).Cast<IRPNElement>().ToList(),
+                    stack,
+                    outputList));
             }
 
             widowsDijkstrasAlgorithmSnap.Table = snapList;
@@ -99,7 +110,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
 
         public DijkstrasAlgorithm(List<Model.Lexem> lexemList)
         {
-            this.inputListLexems = lexemList.Cast<IRPNElement>().ToList();
+            this.inputListLexems = lexemList;//.Cast<IRPNElement>().ToList();
         }
 
 
@@ -203,7 +214,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
                 throw new Exception("oops, unexpected problem");
             }
 
-            outputList.Add(((Label)fromStack[1]).SetPostion(outputList.Count+1));
+            outputList.Add(((Label)fromStack[1])/*.SetPostion(outputList.Count+1)*/);
             outputList.Add(new UT());
             outputList.Add(((Label)fromStack[2]).SetPostion(outputList.Count + 1));
         }

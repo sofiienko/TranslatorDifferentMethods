@@ -71,8 +71,8 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
 
             PrepareRelationMatrix();
-            Parse();
-
+            //Parse(); 
+            //todo:comment out line above
             if (showParsingTable) new ParsingTableWindows(snapList).Show();
 
 

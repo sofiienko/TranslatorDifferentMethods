@@ -283,33 +283,26 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
                 "<type># int | float | unsigned int | unsigned float";
 
-            string test = "<PROGRAM># program id <declaration_list1> begin <operator_list1> end.\n" +
-             "<declaration_list># <declaration> ¶|<declaration_list> <declaration> ¶\n" +
-             "<declaration># double <id_list1>|int <id_list1>\n" +
-             "<id_list># , id|<id_list> , id\n" +
-             "<operator_list># <operator> ¶|<operator_list> <operator> ¶\n" +
-             "<operator># <pr>|<write>|<read>|<loop>|<jump>|<tern>\n" +
-             "<tern># id = <logE1> ? <E1> : <E1>\n" +
-             "<pr># id = <E1>\n" +
-             "<write># write ( <id_list1> )\n" +
-             "<read># read ( <id_list1> )\n" +
-             "<loop># while <logE1> do <operator_list1>\n" +
-             "<jump># if <logE1> then <operator_list1> else <operator_list1> endif\n" +
-             "<z># <|>|<=|>=|==|!=\n" +
-             "<E># <T1>|<E> + <T1>|<E> - <T1>\n" +
-             "<T># <M>|<T> * <M>|<T> / <M>\n" +
-             "<M># id|const|( <E1> )\n" +
-             "<declaration_list1># <declaration_list>\n" +
-             "<id_list1># <id_list>\n" +
-             "<operator_list1># <operator_list>\n" +
-             "<logE># <lt1>|<logE> // <lt1>\n" +
-             "<lt># <lm>|<lt> && <lm>\n" +
-             "<lm># <relation>|! <lm>|[ <logE1> ]\n" +
-             "<relation># <E> <z> <E1>\n" +
-             "<logE1># <logE>\n" +
-             "<E1># <E>\n" +
-             "<lt1># <lt>\n" +
-             "<T1># <T>";
+            //string input = "<logicalExpression1># <logicalExpression>\n" +
+            //    "<logicalExpression># <logicalTerm1> | <logicalExpression> or <logicalTerm1>\n" +
+
+            //    "<logicalTerm1># <logicalTerm>\n" +
+            //    "<logicalTerm># <logicalMultiple1> | <logicalTerm> and <logicalMultiple1>\n" +
+
+            //    "<logicalMultiple1># <logicalMultiple>\n" +
+            //    "<logicalMultiple># <relation> | not <logicalMultiple> | ( <logicalExpression1> )\n" +//changed
+
+            //    "<relation># <expression> <relationSign> <expression1>\n" +
+            //    "<relationSign># < | > | = \n" +
+
+            //    "<expression1># <expression>\n" +
+            //    "<expression># <term1> | <expression> + <term1>| <expression> - <term1>\n" +
+
+            //    "<term1># <term>\n" +
+            //    "<term># <multiple> | <term> * <assign1> |<term> / <assign1>\n" +
+            //    "<assign1># <assign> \n"+
+            //    "<assign># <idn> := <term1>\n" +
+            //    "<multiple># ( <assign1> ) | id | const";
 
 
             string[] rows = input.Split('\n');

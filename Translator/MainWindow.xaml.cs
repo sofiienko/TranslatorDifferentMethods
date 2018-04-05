@@ -98,18 +98,19 @@ namespace Translator
             //try
             //{
 
-           // syntaxAnalyser2.CheckSyntax(adapter.ModelLexemList);
-             DijkstrasAlgorithm dijkstra = new DijkstrasAlgorithm();
-             dijkstra.BuildRPN(adapter.ModelLexemList);
-                //syntaxAnalyser.CheckSyntax(adapter.ModelLexemList);
+            syntaxAnalyser2.CheckSyntax(adapter.ModelLexemList);
 
+            syntaxAnalyser.CheckSyntax(adapter.ModelLexemList);
+
+            DijkstrasAlgorithm dijkstra = new DijkstrasAlgorithm();
+            dijkstra.BuildRPN(adapter.ModelLexemList);
 
             //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message+" "+ex.Source);
-            //}
-    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show(ex.Message+" "+ex.Source);
+            //    }
+        }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
         {
