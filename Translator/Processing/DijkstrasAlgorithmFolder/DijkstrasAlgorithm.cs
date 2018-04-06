@@ -183,7 +183,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             if (stack.Count>0&& stack.Peek() is OperatorComponent op)
             {
                 if (((Operator)op[0]) != operatorRepo["while"]) return;
-                else if( op[1] != null && op[1] == null)
+                else if( op[1] != null && op[2] == null)
                 {
                     op = (OperatorComponent)stack.Pop();
                     var label = labelControler.NewLabelLink();

@@ -43,5 +43,9 @@ namespace Translator.Model
             this.idntObject = identifierObject;
         }
 
+        public override string ToString()
+        {
+            return " "+Name+" ";
+        }
     }
 }
