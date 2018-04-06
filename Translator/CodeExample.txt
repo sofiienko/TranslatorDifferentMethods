@@ -89,5 +89,6 @@ float b=1
 fi
 float c=(4*7+3)+3*5
 enddo
-write(a,b,c)
+int i = [3>1]?0+1:2*3
+write(a,b,c,i)
 end

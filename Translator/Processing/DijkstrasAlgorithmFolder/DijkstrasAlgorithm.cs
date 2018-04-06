@@ -33,8 +33,8 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         /// </summary>
         public DijkstrasAlgorithm()
         {
-            OperatorDictionary.Add(operatorRepo["("], WorkWithStackDefault);
-            OperatorDictionary.Add(operatorRepo["["], WorkWithStackDefault);
+            OperatorDictionary.Add(operatorRepo["("], OpenBracket);
+            OperatorDictionary.Add(operatorRepo["["], OpenBracket);
 
             OperatorDictionary.Add(operatorRepo["+"], WorkWithStackDefault);
             OperatorDictionary.Add(operatorRepo["-"], WorkWithStackDefault);
@@ -117,13 +117,16 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             this.inputListLexems = lexemList;//.Cast<IRPNElement>().ToList();
         }
 
-
+        public void OpenBracket(Operator _operator)
+        {
+            stack.Push(_operator);
+        }
         private void WorkWithStackDefault(Operator _operator)
         {
-            if(stack.Count>0)
+            if (stack.Count > 0)
                 if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
                     outputList.Add((IRPNElement)stack.Pop());
-                stack.Push(_operator);
+            stack.Push(_operator);
 
         }
 
@@ -180,10 +183,10 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         {
             ClosingBracket(_operator);
 
-            if (stack.Count>0&& stack.Peek() is OperatorComponent op)
+            if (stack.Count > 0 && stack.Peek() is OperatorComponent op)
             {
                 if (((Operator)op[0]) != operatorRepo["while"]) return;
-                else if( op[1] != null && op[2] == null)
+                else if (op[1] != null && op[2] == null)
                 {
                     op = (OperatorComponent)stack.Pop();
                     var label = labelControler.NewLabelLink();
@@ -317,7 +320,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
                     outputList.Add(inputListLexems[cursor]);
                     outputList.Add(new WT());
 
-                    if (inputListLexems[cursor+1].Substring == ",") continue;
+                    if (inputListLexems[cursor + 1].Substring == ",") continue;
                 }
             }
         }

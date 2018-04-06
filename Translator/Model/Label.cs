@@ -34,7 +34,7 @@ namespace Translator.Model
 
         public override string ToString()
         {
-            return "L" + NumberLabel;
+            return " L" + NumberLabel+" ";
         }
     }
 
@@ -69,7 +69,7 @@ namespace Translator.Model
 
         public override string ToString()
         {
-            return "L" + NumberLabel;
+            return " L" + NumberLabel+" ";
         }
     }
 
