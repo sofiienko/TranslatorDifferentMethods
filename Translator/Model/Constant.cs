@@ -28,5 +28,10 @@ namespace Translator.Model
         public TerminalCode Type { get; private set; }
 
         public double  Value { get; set; }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 }

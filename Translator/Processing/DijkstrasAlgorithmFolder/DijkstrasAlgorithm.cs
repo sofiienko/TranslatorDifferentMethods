@@ -20,7 +20,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         //   List<IRPNElement> inputListLexems;
         List<Model.Lexem> inputListLexems;
 
-        int currentPosInListLexems = 0;
+        int cursor = 0;
 
         Stack<IOperator> stack = new Stack<IOperator>();
         List<IRPNElement> outputList = new List<IRPNElement>();
@@ -53,20 +53,24 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             OperatorDictionary.Add(operatorRepo["!="], WorkWithStackDefault);
             OperatorDictionary.Add(operatorRepo["="], WorkWithStackDefault);
 
-            OperatorDictionary.Add(operatorRepo[")"], ClosingBracket);
+            OperatorDictionary.Add(operatorRepo[")"], ClosingBracketSpec);
             OperatorDictionary.Add(operatorRepo["]"], ClosingBracket);
 
             //OperatorDictionary.Add(operatorRepo["do"], DoNothing);
-            OperatorDictionary.Add(operatorRepo["while"], OperatorWhile);
-            OperatorDictionary.Add(operatorRepo["enddo"], OperatorEndDo);
+            OperatorDictionary.Add(operatorRepo["while"], OperatorWhileNew);
+            OperatorDictionary.Add(operatorRepo["enddo"], OperatorEndDoNew);
 
-            OperatorDictionary.Add(operatorRepo["if"], OperatorIf);
-            OperatorDictionary.Add(operatorRepo["then"], OperatorThen);
+            OperatorDictionary.Add(operatorRepo["if"], OperatorIfNew);
+            OperatorDictionary.Add(operatorRepo["then"], OperatorThenNew);
             OperatorDictionary.Add(operatorRepo["fi"], OperatorFi);
 
+            OperatorDictionary.Add(operatorRepo["¶"], EndOfLine);
 
-            OperatorDictionary.Add(operatorRepo["¶"], WorkWithStackDefaultWithoutInsert);
+            OperatorDictionary.Add(operatorRepo["?"], TernarOperatorStart);
+            OperatorDictionary.Add(operatorRepo[":"], TernarOperatorSecondPart);
 
+            OperatorDictionary.Add(operatorRepo["read"], OperatorRead);
+            OperatorDictionary.Add(operatorRepo["write"], OperatorWrite);
         }
 
         public void BuildRPN(List<Model.Lexem> lexemList)
@@ -74,26 +78,26 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
 
             this.inputListLexems = lexemList;//.Cast<IRPNElement>().ToList();
 
-            for (int i=0;i<inputListLexems.Count;i++) 
+            for (; cursor < inputListLexems.Count; cursor++)
             {
 
-                var temp = inputListLexems[i];// this row only for debug
+                var temp = inputListLexems[cursor];// this row only for debug
 
-                if (inputListLexems[i] is Constant || inputListLexems[i] is Link)
+                if (inputListLexems[cursor] is Constant || inputListLexems[cursor] is Link)
                 {
-                    outputList.Add(inputListLexems[i]);
+                    outputList.Add(inputListLexems[cursor]);
                 }
                 else
                 {
                     //var _operator = operatorRepo[(inputListLexems[i] as Model.Lexem).Substring];
-                    var _operator = operatorRepo[inputListLexems[i].Substring];
+                    var _operator = operatorRepo[inputListLexems[cursor].Substring];
 
                     if (_operator == null) continue;
 
                     OperatorDictionary[_operator](_operator);
                 }
                 snapList.Add(new DijkstrasAlgorithmSnap(
-                    inputListLexems.Skip(i+1).Cast<IRPNElement>().ToList(),
+                    inputListLexems.Skip(cursor + 1).Cast<IRPNElement>().ToList(),
                     stack,
                     outputList));
             }
@@ -116,32 +120,43 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
 
         private void WorkWithStackDefault(Operator _operator)
         {
-            try
-            {
+            if(stack.Count>0)
                 if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
                     outputList.Add((IRPNElement)stack.Pop());
                 stack.Push(_operator);
-            }
-            catch (InvalidOperationException)
-            {
-                stack.Push(_operator);
-            }
+
         }
 
         /// <summary>
         /// WorkWithStackDefaultWithoutInserting in outputList
         /// </summary>
         /// <param name="_operator"></param>
-        private void WorkWithStackDefaultWithoutInsert(Operator _operator)
+        private void EndOfLine(Operator _operator)
         {
             if (stack.Count > 0)
             {
-                if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
+                while (stack.Count != 0 && stack.Peek().СomparativePriority >= _operator.СomparativePriority)
                 {
-                    outputList.Add((IRPNElement)stack.Pop());
+                    if (stack.Peek() is OperatorComponent component)
+                    {
+                        outputList.Add(((Label)component[1]).SetPostion(outputList.Count + 1));
+                        stack.Pop();
+                    }
+                    else
+                    {
+                        outputList.Add((IRPNElement)stack.Pop());
+                    }
                 }
             }
-          
+
+        }
+
+        private void WorkWithStackDefaultWithoutInsert(Operator _operator)
+        {
+            if (stack.Count == 0) return;
+
+            if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
+                outputList.Add((IRPNElement)stack.Pop());
         }
 
         /// <summary>
@@ -154,9 +169,29 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             //if (stack.Peek().СomparativePriority >= _operator.СomparativePriority)
             //    outputList.Add((IRPNElement)stack.Pop());
 
-            while(stack.Peek()!= operatorRepo["("] && stack.Peek() != operatorRepo["["])
+            Operator closeBracket = _operator.Sign == ")" ? operatorRepo["("] : operatorRepo["["];
+            while (stack.Count > 0 && stack.Peek() != closeBracket)
                 outputList.Add((IRPNElement)stack.Pop());
             stack.Pop();
+        }
+
+
+        private void ClosingBracketSpec(Operator _operator)
+        {
+            ClosingBracket(_operator);
+
+            if (stack.Count>0&& stack.Peek() is OperatorComponent op)
+            {
+                if (((Operator)op[0]) != operatorRepo["while"]) return;
+                else if( op[1] != null && op[1] == null)
+                {
+                    op = (OperatorComponent)stack.Pop();
+                    var label = labelControler.NewLabelLink();
+                    outputList.Add(label);
+                    outputList.Add(new CTbM());
+                    stack.Push(new OperatorComponent(op[0], op[1], label));
+                }
+            }
         }
 
         private void DoNothing(Operator _operator) { }
@@ -169,11 +204,13 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
 
             stack.Push(new OperatorComponent(operatorRepo["if"], label));
         }
+
+
         private void OperatorThen(Operator _operator)
         {
-
-
         }
+
+
         private void OperatorFi(Operator _operator)
         {
             while (!(stack.Peek() is OperatorComponent))
@@ -182,11 +219,10 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             outputList.Add(((Label)((stack.Pop() as OperatorComponent)
                 .Components.LastOrDefault()))
                 .SetPostion(outputList.Count));
-               
         }
 
 
-        private int labelCounter = 0;
+        //  private int labelCounter = 0;
         private void OperatorWhile(Operator _operator)
         {
             var label1 = labelControler.NewLabel(outputList.Count);
@@ -198,10 +234,10 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             outputList.Add(label2);
 
 
-            stack.Push(new OperatorComponent(operatorRepo["while"],label1,label2));
+            stack.Push(new OperatorComponent(operatorRepo["while"], label1, label2));
 
         }
-        private void OperatorEndDo(Operator _operator)
+        private void OperatorEndDoNew(Operator _operator)
         {
             while (!(stack.Peek() is OperatorComponent))
                 outputList.Add((IRPNElement)stack.Pop());
@@ -209,7 +245,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
 
             OperatorComponent fromStack = stack.Pop() as OperatorComponent;
 
-            if(fromStack==null)
+            if (fromStack == null)
             {
                 throw new Exception("oops, unexpected problem");
             }
@@ -217,6 +253,117 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
             outputList.Add(((Label)fromStack[1])/*.SetPostion(outputList.Count+1)*/);
             outputList.Add(new UT());
             outputList.Add(((Label)fromStack[2]).SetPostion(outputList.Count + 1));
+        }
+
+        private void OperatorThenNew(Operator _operator)
+        {
+            var label = labelControler.NewLabelLink();
+            outputList.Add(label);
+            outputList.Add(new CTbM()); // conditional transition by mistake
+
+            //while (stack.Peek() != operatorRepo["if"])
+            //{
+            //    outputList.Add((IRPNElement)stack.Pop());
+            //}
+
+            while (!(stack.Peek() is OperatorComponent))
+            {
+                outputList.Add((IRPNElement)stack.Pop());
+            }
+
+            stack.Pop();
+            stack.Push(new OperatorComponent(operatorRepo["if"], label));
+
+        }
+
+        private void OperatorWhileNew(Operator _operator)
+        {
+            var label1 = labelControler.NewLabel(outputList.Count);
+            outputList.Add(label1);
+
+            stack.Push(new OperatorComponent(operatorRepo["while"], label1));
+
+        }
+
+        private void OperatorIfNew(Operator _operator)
+        {
+            //WorkWithStackDefaultWithoutInsert(operatorRepo["if"]);
+            stack.Push(new OperatorComponent(operatorRepo["if"]));
+        }
+
+        private void OperatorRead(Operator _operator)
+        {
+            if (inputListLexems[++cursor].Substring != "(") throw new Exception($"After Read should be '(' lexem, row {inputListLexems[cursor - 1].Row}");
+
+            while (inputListLexems[++cursor].Substring != ")")
+            {
+                if (inputListLexems[cursor] is Constant || inputListLexems[cursor] is Link)
+                {
+                    outputList.Add(inputListLexems[cursor]);
+                    outputList.Add(new RD());
+
+                    if (inputListLexems[++cursor].Substring == ",") continue;
+                }
+            }
+        }
+        private void OperatorWrite(Operator _operator)
+        {
+            if (inputListLexems[++cursor].Substring != "(") throw new Exception($"After Read should be '(' lexem, row {inputListLexems[cursor - 1].Row}");
+
+            while (inputListLexems[++cursor].Substring != ")")
+            {
+                if (inputListLexems[cursor] is Constant || inputListLexems[cursor] is Link)
+                {
+                    outputList.Add(inputListLexems[cursor]);
+                    outputList.Add(new WT());
+
+                    if (inputListLexems[cursor+1].Substring == ",") continue;
+                }
+            }
+        }
+
+        private void TernarOperatorStart(Operator _operator)
+        {
+            var label = labelControler.NewLabel(outputList.Count);
+
+            outputList.Add(label);
+            outputList.Add(new CTbM());
+
+            stack.Push(new OperatorComponent(operatorRepo[":"], label));
+        }
+
+
+        private void TernarOperatorSecondPart(Operator _operator)
+        {
+
+
+            while (!(stack.Peek() is OperatorComponent))
+            {
+                outputList.Add((IRPNElement)stack.Pop());
+            }
+
+            var label = labelControler.NewLabelLink();
+            outputList.Add(label);
+            outputList.Add(new UT());
+
+
+            OperatorComponent oldComponent = (OperatorComponent)stack.Pop();
+
+            ((Label)oldComponent[1]).SetPostion(outputList.Count + 1);
+            outputList.Add(oldComponent[1]);
+
+            stack.Push(new OperatorComponent(oldComponent[0], label, oldComponent[1]));
+        }
+
+        private void TernarOperatorEnd(Operator _operator)
+        {
+            WorkWithStackDefault(_operator);
+
+            if (stack.Pop() is OperatorComponent component)
+            {
+                outputList.Add(((Label)component[1]).SetPostion(outputList.Count + 1));
+            }
+            else throw new Exception("problem");
         }
     }
 
@@ -227,7 +374,7 @@ namespace Translator.Processing.DijkstrasAlgorithmFolder
         public string Output { get; set; }
 
 
-       public DijkstrasAlgorithmSnap(List<IRPNElement> input, Stack<IOperator>  stack,List<IRPNElement> output)
+        public DijkstrasAlgorithmSnap(List<IRPNElement> input, Stack<IOperator> stack, List<IRPNElement> output)
         {
             StringBuilder s = new StringBuilder();
             foreach (var item in input)

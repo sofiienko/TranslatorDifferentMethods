@@ -19,7 +19,8 @@ namespace Translator.Model
         {
             get
             {
-                return Components[number]??null;
+                if (Components.Count <= number) return null;
+                return Components[number];
             }
         }
 

@@ -25,7 +25,7 @@ namespace Translator.Processing
     {
         public override string ToString()
         {
-            return "UT";
+            return " UT ";
         }
         
     }
@@ -37,7 +37,7 @@ namespace Translator.Processing
     {
         public override string ToString()
         {
-            return "WT";
+            return " WT ";
         }
 
     }
@@ -50,7 +50,7 @@ namespace Translator.Processing
     {
         public override string ToString()
         {
-            return "RD";
+            return " RD ";
         }
 
     }

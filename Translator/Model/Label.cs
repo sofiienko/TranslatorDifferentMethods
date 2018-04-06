@@ -59,10 +59,10 @@ namespace Translator.Model
 
         public Label SetPostion(int position)
         {
-            if(this.position!=null)
-            {
-                throw new Exception("Position is setted now");
-            }
+            //if(this.position!=null)
+            //{
+            //    throw new Exception("Position is setted now");
+            //}
             this.position = position;
             return this;
         }

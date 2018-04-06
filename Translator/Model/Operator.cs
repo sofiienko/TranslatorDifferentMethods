@@ -77,41 +77,54 @@ namespace Translator.Model
                 new Operator("if",-1),
                 new Operator("while",-1),
                 new Operator("(",0),
-                new Operator("[",0),
+                
                 //new Operator("if",0),
                 //new Operator("do",0),
 
-                new Operator(")",1),
-                new Operator("]",1),
+               
+                //new Operator("=",0),
+
+                 new Operator(")",1),
+
+
 
                 new Operator("¶",1),
 
                 new Operator("or",1),
                 new Operator("then",1),
-                 new Operator("while",1),
+                new Operator("while",1),
+                new Operator("?",1),
+                new Operator(":",1),
+                new Operator("=",2),//todo:check is work good with and
 
-                new Operator("and",2),
 
-                new Operator("not",3),
+                new Operator("[",3),
+                new Operator("]",4),
 
-                new Operator("=",3),
+                new Operator("and",5),
 
-                new Operator("<",4),
-                new Operator(">",4),
-                new Operator("<=",4),
-                new Operator(">=",4),
-                new Operator("==",4),
-                new Operator("!=",4),
+                new Operator("not",6),
 
-                new Operator("+",5),
-                new Operator("-",5),
+                
 
-                new Operator("*",6),
-                new Operator("/",6),
+                new Operator("<",7),
+                new Operator(">",7),
+                new Operator("<=",7),
+                new Operator(">=",7),
+                new Operator("==",7),
+                new Operator("!=",7),
+
+                new Operator("+",8),
+                new Operator("-",8),
+
+                new Operator("*",9),
+                new Operator("/",9),
 
 
                 new Operator("fi"),
-                new Operator("enddo")
+                new Operator("enddo"),
+                new Operator("read"),
+                new Operator("write")
             };
         }
 
