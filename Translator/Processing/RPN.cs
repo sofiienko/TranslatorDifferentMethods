@@ -31,20 +31,19 @@ namespace Translator.Processing
     /// <summary>
     /// Element for BuildRPNForAscending Analys
     /// </summary>
+    /// 
+
     class LFET
     {
         public string Substring { get; set; }
-
         public override string ToString()
         {
             return Substring;
         }
-
         public LFET(string substring)
         {
             this.Substring = substring;
         }
-
         public static LFET[] LexemBConstructor(params string[] lexemsText)
         {
             LFET[] mass = new LFET[lexemsText.Length];
@@ -56,20 +55,13 @@ namespace Translator.Processing
         }
     }
 
-
-
-
     /// <summary>
     /// Reverse Polish Notation
     /// ПОЛІЗ:Польський Інвертний Запис
     /// </summary>
     class RPN
-    {
-       
+    {      
         static public List<RPNSnap> AllRPN{ get; protected set; } = new List<RPNSnap>();
-
-
-
         public List<IRPNElement> Current { get; protected set; } = new List<IRPNElement>();
 
         protected double Calculation(List<IRPNElement> list)

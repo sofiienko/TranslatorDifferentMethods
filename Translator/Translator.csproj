@@ -59,6 +59,7 @@
     </ApplicationDefinition>
     <Compile Include="AdapterFromOldToNewModel.cs" />
     <Compile Include="ControlWriter.cs" />
+    <Compile Include="ExecutingRPN\executingRPN.cs" />
     <Compile Include="Grammar.cs" />
     <Compile Include="Model\Alphabet.cs" />
     <Compile Include="Model\Constant.cs" />
