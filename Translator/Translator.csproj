@@ -76,7 +76,6 @@
     <Compile Include="Model\Terminal.cs" />
     <Compile Include="Processing\BuildRPNForAA.cs" />
     <Compile Include="Processing\DijkstrasAlgorithmFolder\DijkstrasAlgorithm.cs" />
-    <Compile Include="Processing\DijkstrasAlgorithmFolder\NewServicesOperators.cs" />
     <Compile Include="Processing\DijkstrasAlgorithmFolder\LabelControler.cs" />
     <Compile Include="Processing\RPN.cs" />
     <Compile Include="Processing\SnapCalculationRPN.cs" />

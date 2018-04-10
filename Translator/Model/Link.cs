@@ -8,7 +8,7 @@ namespace Translator.Model
 {
   public  class Link:Lexem
     {
-        private Identifier idntObject;
+        public Identifier idntObject;
 
         public uint NumberInIdentifierList { get; private set; }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Translator.Model;
 
 namespace Translator.SyntaxAnalyser.AscendingAnalysis
 {
@@ -15,20 +16,20 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
 
         public string RPN { get; private set; }
 
-        public SnapCalculationRPN(Stack<LexemB> stack, List<LexemB> rpn)
+        public SnapCalculationRPN(Stack<IRPNElement> stack, List<IRPNElement> rpn)
         {
             this.Number = ++counter;
 
 
             StringBuilder stackString = new StringBuilder();
             foreach (var item in stack)
-                stackString.Append(item.Substring);
+                stackString.Append(item.ToString());
 
             this.Stack = stackString.ToString();
 
             StringBuilder rpnString = new StringBuilder();
             foreach (var item in rpn)
-                rpnString.Append(item.Substring);
+                rpnString.Append(item.ToString());
 
             this.RPN = rpn.ToString();
         }

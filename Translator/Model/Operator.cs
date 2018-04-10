@@ -124,7 +124,16 @@ namespace Translator.Model
                 new Operator("fi"),
                 new Operator("enddo"),
                 new Operator("read"),
-                new Operator("write")
+                new Operator("write"),
+
+                //special operators
+
+                new Operator("RD"),
+                new Operator("WT"),
+                new Operator("UT"),
+                new Operator("CTbM")
+
+
             };
         }
 

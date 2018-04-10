@@ -79,10 +79,12 @@ namespace Translator.Processing
                     double operant1 = stack.Pop();
                     double resultOperation=0;
 
-                    if (oprator.Sign == "*") resultOperation = Multiple(operant1, operant2);
-                    else if (oprator.Sign == "/") resultOperation = Devide(operant1, operant2);
-                    else if (oprator.Sign == "+") resultOperation = Plus(operant1, operant2);
-                    else if (oprator.Sign == "-") resultOperation = Minus(operant1, operant2);
+
+                    throw new Exception("this part of code doesn`t finished");
+                    //if (oprator.Sign == "*") resultOperation = Multiple(operant1, operant2);
+                    //else if (oprator.Sign == "/") resultOperation = Devide(operant1, operant2);
+                    //else if (oprator.Sign == "+") resultOperation = Plus(operant1, operant2);
+                    //else if (oprator.Sign == "-") resultOperation = Minus(operant1, operant2);
 
                     stack.Push(resultOperation);
                 }
@@ -110,29 +112,6 @@ namespace Translator.Processing
             return sb.ToString();
          }
 
-        public double Multiple(double operant1,double operant2)
-        {
-            return operant1 * operant2;
-        }
-        public double Devide(double operant1, double operant2)
-        {
-            try
-            {
-                return operant1 / operant2;
-            }
-            catch(DivideByZeroException)
-            {
-                Console.WriteLine("Dividing by zero");
-                throw new Exception("Dividing by zero");
-            }
-        }
-        public double Plus(double operant1, double operant2)
-        {
-            return operant1 + operant2;
-        }
-        public double Minus(double operant1, double operant2)
-        {
-            return operant1 - operant2;
-        }
+
     }
 }

@@ -92,3 +92,55 @@ enddo
 int i = [3>1]?0+1:2*3
 write(a,b,c,i)
 end
+
+program
+begin
+float startValue = 3*(5-2+1)-4
+float buffer = startValue*3-2
+startValue = buffer+1000
+write(startValue)
+end
+
+program
+begin
+int i=0
+do while(i<5)
+write(i)
+i=i+1
+enddo
+end
+
+program
+begin
+int i=0
+do while(i<5)
+write(i)
+i=i+1
+enddo
+if(i==4)
+then
+i=i*i*(3-2*2)
+fi
+write(i)
+end
+
+program
+begin
+int i=4
+if(i==4)
+then
+i=0
+fi
+write(i)
+end
+
+program
+begin
+int i=0
+do while(i<5)
+i=i+1
+write(i)
+enddo
+int j = (i>0)?5*2:-99
+write(i,j)
+end

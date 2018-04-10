@@ -29,13 +29,10 @@ namespace Translator
             TextRange documentRange = new TextRange(codeTextBox.Document.ContentStart, codeTextBox.Document.ContentEnd);
             documentRange.ClearAllProperties();
 
-
-
             TextPointer navigator = codeTextBox.Document.ContentStart;
 
             while (navigator.CompareTo(codeTextBox.Document.ContentEnd) < 0)
             {
-
                 TextPointerContext context = navigator.GetPointerContext(LogicalDirection.Backward);
 
                 if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
@@ -103,7 +100,10 @@ namespace Translator
             syntaxAnalyser.CheckSyntax(adapter.ModelLexemList);
 
             DijkstrasAlgorithm dijkstra = new DijkstrasAlgorithm();
+            
             dijkstra.BuildRPN(adapter.ModelLexemList);
+            ExecutingRPN.ExecutingRPN executingRPN = new ExecutingRPN.ExecutingRPN(dijkstra.OutputList);
+            executingRPN.Execute();
 
             //}
             //    catch (Exception ex)
