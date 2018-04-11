@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Translator.Model;
 using Translator.Processing;
 using Translator.Model;
+using Translator.SyntaxAnalyser.AscendingAnalysis;
+
 namespace Translator.ExecutingRPN
 {
 
@@ -16,6 +18,11 @@ namespace Translator.ExecutingRPN
         {
             this.Value = result;
         }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
     public class DigitType : IRPNElement
     {
@@ -24,12 +31,20 @@ namespace Translator.ExecutingRPN
         {
             this.Value = result;
         }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
     public class ExecutingRPN
     {
         Stack<IRPNElement> stack = new Stack<IRPNElement>();
         List<IRPNElement> inputList;
         private int i;
+
+        public List<SnapCalculationRPN> SnapsList { get; private set; } = new List<SnapCalculationRPN>();
+        UniversalTableWindwos windwos = new UniversalTableWindwos();
         public  ExecutingRPN(List<IRPNElement> inputList )
         {
             this.inputList = inputList;
@@ -41,6 +56,9 @@ namespace Translator.ExecutingRPN
             
             for (; i < inputList.Count; i++)
             {
+
+                SnapsList.Add(new SnapCalculationRPN(stack, inputList.Skip(i).ToList()));
+
                 if (inputList[i] is Model.Link) stack.Push(inputList[i]);
                 else if (inputList[i] is Model.Constant) stack.Push(inputList[i]);
                 else if (inputList[i] is Model.Label label)
@@ -146,6 +164,11 @@ namespace Translator.ExecutingRPN
             }
             //if (stack.Count != 1) throw new Exception("Oops, problem with calcultation");
             //else return stack.Pop();
+
+            windwos.Table = SnapsList;
+            windwos.Show();
+
+
         }
 
 

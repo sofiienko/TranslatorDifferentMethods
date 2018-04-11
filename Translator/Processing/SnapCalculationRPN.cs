@@ -7,7 +7,7 @@ using Translator.Model;
 
 namespace Translator.SyntaxAnalyser.AscendingAnalysis
 {
-    class SnapCalculationRPN
+  public  class SnapCalculationRPN
     {
         static private int counter = 0;
 
@@ -31,7 +31,7 @@ namespace Translator.SyntaxAnalyser.AscendingAnalysis
             foreach (var item in rpn)
                 rpnString.Append(item.ToString());
 
-            this.RPN = rpn.ToString();
+            this.RPN = rpnString.ToString();
         }
     }
 }
