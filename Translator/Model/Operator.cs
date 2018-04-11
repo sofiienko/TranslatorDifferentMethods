@@ -92,7 +92,7 @@ namespace Translator.Model
 
                 new Operator("or",1),
                 new Operator("then",1),
-                new Operator("while",1),
+                //new Operator("while",1),
                 new Operator("?",1),
                 new Operator(":",1),
                 new Operator("=",2),//todo:check is work good with and

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -54,7 +55,22 @@ namespace Translator
             Paragraph paragraph = this.codeTextBox.Document.Blocks.FirstBlock as Paragraph;
             paragraph.LineHeight = 8;
 
+            #region Console Redirection
+            //old 
             Console.SetOut(new MultiTextWriter(new ControlWriter(consoleBox), Console.Out));
+           // Console.SetIn(new ControlReader(consoleBox));
+
+            //new, but it doesn`t work
+            //var console = new MyConsole();
+            //this.Content = console.Gui;
+            //Task.Factory.StartNew(() => {
+            //    var read = console.ReadLine();
+            //    console.WriteLine(read);
+            //});
+
+            ConsoleWin32.AllocConsole();
+            Console.Write("hello");
+            #endregion
             //Console.OutputEncoding = Encoding.UTF8;
         }
 
@@ -89,6 +105,8 @@ namespace Translator
 
             ISyntaxAnalyser syntaxAnalyser = new AscendingAnalys();
             ISyntaxAnalyser syntaxAnalyser2 = new RecursiveDescent();
+
+           
             AdapterFromOldToNewModel adapter = new AdapterFromOldToNewModel(analyser.LexemList,analyser.IdentifierList, analyser.ConstantList );
 
 
@@ -103,6 +121,8 @@ namespace Translator
             
             dijkstra.BuildRPN(adapter.ModelLexemList);
             ExecutingRPN.ExecutingRPN executingRPN = new ExecutingRPN.ExecutingRPN(dijkstra.OutputList);
+
+            this.Activate();
             executingRPN.Execute();
 
             //}

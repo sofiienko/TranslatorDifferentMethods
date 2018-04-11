@@ -58,6 +58,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AdapterFromOldToNewModel.cs" />
+    <Compile Include="ConsoleRedirect.cs" />
+    <Compile Include="ConsoleWin32.cs" />
     <Compile Include="ControlWriter.cs" />
     <Compile Include="ExecutingRPN\executingRPN.cs" />
     <Compile Include="Grammar.cs" />

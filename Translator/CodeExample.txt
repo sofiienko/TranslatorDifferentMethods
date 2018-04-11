@@ -144,3 +144,14 @@ enddo
 int j = (i>0)?5*2:-99
 write(i,j)
 end
+
+
+
+program
+begin
+int i=0
+read(i)
+i=i*i
+write(i)
+end
+
