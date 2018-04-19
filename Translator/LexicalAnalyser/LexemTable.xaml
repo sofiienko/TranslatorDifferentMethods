@@ -17,9 +17,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0" Grid.RowSpan="2">
-            <TextBlock Grid.Column="0" Text="Lexem list" HorizontalAlignment="Center"/>
-            <DataGrid  Name="lexemGrid" />
+        <StackPanel Grid.Column="0" Grid.RowSpan="2" >
+            <TextBlock Grid.Column="0" Text="Lexem list" HorizontalAlignment="Center" />
+            <DataGrid  Name="lexemGrid" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" />
         </StackPanel>
 
 

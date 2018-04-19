@@ -38,7 +38,7 @@ namespace Translator
 
                 if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
                 {
-                    //CheckWordsInRun((Run)navigator.Parent);
+                   // CheckWordsInRun((Run)navigator.Parent);
                 }
                 navigator = navigator.GetNextContextPosition(LogicalDirection.Forward);
 
@@ -57,8 +57,9 @@ namespace Translator
 
             #region Console Redirection
             //old 
-            Console.SetOut(new MultiTextWriter(new ControlWriter(consoleBox), Console.Out));
+            //Console.SetOut(new MultiTextWriter(new ControlWriter(consoleBox), Console.Out));
            // Console.SetIn(new ControlReader(consoleBox));
+
 
             //new, but it doesn`t work
             //var console = new MyConsole();
@@ -82,12 +83,27 @@ namespace Translator
 
             foreach (var item in document.Blocks)
             {
-                listString.Add(new TextRange(item.ContentStart, item.ContentEnd).Text);
+
+                string temp = new TextRange(item.ContentStart, item.ContentEnd).Text;
+                temp = ClearingCode(temp);
+
+                if(temp!=null)listString.Add(temp);
             }
 
             return listString;
         }
 
+        private string ClearingCode(string text)
+        {
+            if (text == "" || text == "\t\t" || text.StartsWith("//"))
+                return null;
+            else
+            {
+                text = text.Replace('\t', ' ');
+                //text.Remove(text.IndexOf("//")); todo:add comments
+            }
+            return text;
+        }
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
@@ -123,7 +139,7 @@ namespace Translator
             ExecutingRPN.ExecutingRPN executingRPN = new ExecutingRPN.ExecutingRPN(dijkstra.OutputList);
 
             this.Activate();
-            executingRPN.Execute();
+           executingRPN.Execute();
 
             //}
             //    catch (Exception ex)

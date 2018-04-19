@@ -147,11 +147,101 @@ end
 
 
 
+
+
+
 program
 begin
 int i=0
-read(i)
+int k=0
+read(i,k)
 i=i*i
-write(i)
+write(i,k)
 end
 
+
+
+program
+begin
+int i=0
+int k =10
+do  while(i<15)
+do  while(k>i)
+k=k+1
+enddo
+i=i*i+3
+enddo
+if(i<10 or i>=5)
+then
+i=i*i
+fi
+write(i,k)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+program
+begin
+	int a=0
+	int b=0
+	float c=0
+	read(a,b,c)
+
+	int i=0
+	float sum=0
+
+	do while(i<a)
+
+		b=b*(c+i)
+
+		if(i<10 and i>=5)then
+		i=i*i
+		fi
+		
+		write(i,b)
+	enddo
+
+	write(0,0,0)
+
+	c = (i!=a)?333:-999
+	write(c)
+end
+
+program
+begin
+int a=0
+int b=0
+float c=0
+read(a,b,c)
+
+int i=0
+float sum=0
+
+do while(i<a)
+
+b=b*(c+i)
+
+if(i<10 and i>=5)then
+i=i+1
+fi
+i=i+0.1	
+write(i,b)
+enddo
+
+write(0,0,0)
+
+c = (i!=a)?333:-999
+write(c)
+end

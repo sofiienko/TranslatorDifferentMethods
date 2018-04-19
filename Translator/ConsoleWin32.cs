@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-    class ConsoleWin32
+  public  class ConsoleWin32
     {
         /// <summary>
         /// Allocates a new console for current process.
